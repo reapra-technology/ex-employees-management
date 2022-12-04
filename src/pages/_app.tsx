@@ -4,8 +4,18 @@ import App from 'next/app';
 
 import basicAuthCheck from '../utils/basicAuthCheck';
 
+import dynamic from 'next/dynamic';
+
+const AdminLayout = dynamic(() => import('../layouts/adminLayout'), {
+  ssr: false,
+});
+
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
-  return <Component {...pageProps} />;
+  return (
+    <AdminLayout>
+      <Component {...pageProps} />
+    </AdminLayout>
+  );
 }
 
 MyApp.getInitialProps = async (appContext: AppContext) => {
