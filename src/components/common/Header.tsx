@@ -6,8 +6,7 @@ import Container from '@/components/common/parts/Container';
 
 const headerLinkList = [
   { title: 'Home', link: '/' },
-  { title: 'About', link: '/' },
-  { title: 'Contact', link: '/' },
+  { title: 'Setting', link: '/setting' },
 ];
 
 const Header = (): JSX.Element => {
@@ -24,8 +23,8 @@ const Header = (): JSX.Element => {
       <Container className="flex items-center justify-between">
         {/* ロゴ */}
         <Link href="/">
-          <a>
-            <Image src="/vercel.svg" width={120} height={60} alt="vercel" />
+          <a className="flex">
+            <Image src="/reapra-logo.png" width={130} height={50} alt="Reapra" />
           </a>
         </Link>
 

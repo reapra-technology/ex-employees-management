@@ -12,32 +12,17 @@ const footerLinkList = [
 
 const Footer = (): JSX.Element => {
   return (
-    <footer className="bg-gray-50 py-10">
-      <Container>
-        <div className="flex flex-col items-start justify-between md:flex-row">
+    <footer className="bg-gray-50 py-4">
+      <Container className="aliment-center md:flex justify-between items-center">
+        <div className="justify-between text-center md:text-left">
           {/* ロゴ */}
           <Link href="/">
             <a>
-              <Image src="/vercel.svg" width={120} height={60} alt="vercel" />
+              <Image src="/reapra-logo.png" width={130} height={50} alt="reapra" />
             </a>
           </Link>
-
-          {/* ナビゲーション */}
-          <nav>
-            <ol>
-              {footerLinkList.map(({ title, link }) => (
-                <li key={title}>
-                  <Link href={link}>
-                    <a className="mb-1 block py-2 text-sm duration-300 hover:opacity-75 md:text-base">
-                      {title}
-                    </a>
-                  </Link>
-                </li>
-              ))}
-            </ol>
-          </nav>
         </div>
-        <small className="mt-10 block text-center md:text-right">&copy; 2021 UnReact</small>
+        <small className="mt-10 block text-center md:text-right">&copy; 2022 / Reapra Japan</small>
       </Container>
     </footer>
   );
