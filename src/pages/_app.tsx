@@ -1,7 +1,7 @@
 import '@/styles/globals.css';
 import type { AppContext, AppProps } from 'next/app';
 import App from 'next/app';
-
+import { SnackbarContextProvider } from '../utils/snackbar/snackbar';
 import basicAuthCheck from '../utils/basicAuthCheck';
 
 import dynamic from 'next/dynamic';
@@ -12,9 +12,11 @@ const AdminLayout = dynamic(() => import('../layouts/adminLayout'), {
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (
-    <AdminLayout>
-      <Component {...pageProps} />
-    </AdminLayout>
+    <SnackbarContextProvider>
+      <AdminLayout>
+        <Component {...pageProps} />
+      </AdminLayout>
+    </SnackbarContextProvider>
   );
 }
 
