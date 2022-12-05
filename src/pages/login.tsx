@@ -1,11 +1,11 @@
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { getAuthInfo, requestCodeFlow } from '@/api/tokenAuth';
 
-export default function Login() {
-  const { data: session } = useSession();
+export default function Unauthorized(): React.ReactElement {
   return (
     <div>
       <div>ログインしていません。</div>
-      <button onClick={() => {}}>ログイン</button>
+      <button onClick={() => requestCodeFlow()}>ログイン</button>
+      <button onClick={() => console.log('pppprpprp')}>ログイン</button>
     </div>
   );
 }
