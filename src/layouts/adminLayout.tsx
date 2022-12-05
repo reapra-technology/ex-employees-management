@@ -24,13 +24,23 @@ export default function AdminLayout({ children }: { readonly children: ReactNode
 
   return (
     <Layout>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
+      <Sider
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+        style={{ backgroundColor: '#06262D' }}
+      >
         <div className={styles.logo}>
           <Link href="/">
             <Image src="/reapra-logo.png" width={100} height={40} alt="Reapra" />
           </Link>
         </div>
-        <Menu theme="dark" mode="inline" selectedKeys={[router.pathname]}>
+        <Menu
+          theme="dark"
+          mode="inline"
+          selectedKeys={[router.pathname]}
+          style={{ backgroundColor: '#06262D' }}
+        >
           <Menu.Item key="/" icon={<UserOutlined />}>
             <Link href="/">Home</Link>
           </Menu.Item>
@@ -40,7 +50,7 @@ export default function AdminLayout({ children }: { readonly children: ReactNode
         </Menu>
       </Sider>
       <Layout className="site-layout">
-        <Header className={styles.siteLayoutBackground} style={{ padding: 0 }}>
+        <Header className={styles.siteLayoutBackground} style={{ backgroundColor: '#06262D' }}>
           {collapsed ? (
             <MenuUnfoldOutlined className={styles.trigger} onClick={toggle} />
           ) : (

@@ -26,23 +26,26 @@ export default function TitileRowCard() {
   };
 
   return (
-    <div className="flex">
-      <p className="w-1/3 text-center">Email</p>
+    <div className="m-2 flex">
+      <p className="w-1/3 text-center  font-bold"> MailAddress</p>
       <p className="text-gray-300">|</p>
-      <p className="w-3/12 text-center">Location</p>
+      <p className="w-3/12 text-center  font-bold">Location</p>
       {phases.map((num, _) => {
         return (
-          <div className="flex w-1/12 items-center justify-around text-center">
+          <>
             <p className="text-gray-300">|</p>
-            <a className="w-4"></a>
-            <p>Phase{num}</p>
-            <InfoCircleOutlined
-              onClick={() => {
-                showDetail(num);
-              }}
-            />
-            <a className="w-4"></a>
-          </div>
+            <div className="flex w-1/12 items-center justify-around text-center">
+              <a className="w-4"></a>
+              <p className="pr-1  font-bold">Phase{num}</p>
+              <InfoCircleOutlined
+                style={{ color: '#4169e1' }}
+                onClick={() => {
+                  showDetail(num);
+                }}
+              />
+              <a className="w-4"></a>
+            </div>
+          </>
         );
       })}
     </div>

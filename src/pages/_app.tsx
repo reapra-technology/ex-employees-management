@@ -5,6 +5,9 @@ import { SnackbarContextProvider } from '../utils/snackbar/snackbar';
 import basicAuthCheck from '../utils/basicAuthCheck';
 
 import dynamic from 'next/dynamic';
+import { ConfigProvider, Button, Layout } from 'antd';
+import Login from '@/pages/login';
+import { SessionProvider } from 'next-auth/react';
 
 const AdminLayout = dynamic(() => import('../layouts/adminLayout'), {
   ssr: false,
@@ -12,11 +15,19 @@ const AdminLayout = dynamic(() => import('../layouts/adminLayout'), {
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (
-    <SnackbarContextProvider>
-      <AdminLayout>
-        <Component {...pageProps} />
-      </AdminLayout>
-    </SnackbarContextProvider>
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#6d9f71',
+        },
+      }}
+    >
+      <SnackbarContextProvider>
+        <AdminLayout>
+          <Component {...pageProps} />
+        </AdminLayout>
+      </SnackbarContextProvider>
+    </ConfigProvider>
   );
 }
 
