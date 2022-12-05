@@ -1,6 +1,6 @@
 // layouts/adminLayout.tsx
 import { AuthorizedContext } from '@/components/contexts/tokenAuthContext';
-import LoginLayout from '@/layouts/loginLayout';
+import Unauthorized from '@/pages/login';
 import {
   UserOutlined,
   MenuFoldOutlined,
@@ -16,7 +16,7 @@ import styles from './adminLayout.module.css';
 
 const { Header, Sider, Content } = Layout;
 
-export default function AdminLayout({ children }: { readonly children: ReactNode }) {
+export default function LoginLayout() {
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const router = useRouter();
 
@@ -24,20 +24,6 @@ export default function AdminLayout({ children }: { readonly children: ReactNode
 
   function toggle() {
     setCollapsed(!collapsed);
-  }
-
-  useEffect(() => {
-    console.log(authInfo);
-
-    if (authInfo === undefined) {
-      console.log('rrrrr');
-
-      Router.push('/login');
-    }
-  }, []);
-
-  if (authInfo === undefined) {
-    return <LoginLayout></LoginLayout>;
   }
 
   return (
@@ -48,22 +34,14 @@ export default function AdminLayout({ children }: { readonly children: ReactNode
         collapsed={collapsed}
         style={{ backgroundColor: '#06262D' }}
       >
-        <div className={styles.logo}>
-          <Link href="/">
-            <Image src="/reapra-logo.png" width={100} height={40} alt="Reapra" />
-          </Link>
-        </div>
         <Menu
           theme="dark"
           mode="inline"
           selectedKeys={[router.pathname]}
-          style={{ backgroundColor: '#06262D' }}
+          style={{ backgroundColor: '#06262D', paddingTop: '60px' }}
         >
-          <Menu.Item key="/" icon={<UserOutlined />}>
-            <Link href="/">Home</Link>
-          </Menu.Item>
-          <Menu.Item key="/setting" icon={<SettingOutlined />}>
-            <Link href="/setting">Setting</Link>
+          <Menu.Item key="/login" icon={<UserOutlined />}>
+            <Link href="/login">Login</Link>
           </Menu.Item>
         </Menu>
       </Sider>
@@ -83,7 +61,7 @@ export default function AdminLayout({ children }: { readonly children: ReactNode
             minHeight: 280,
           }}
         >
-          {children}
+          <Unauthorized></Unauthorized>
         </Content>
       </Layout>
     </Layout>

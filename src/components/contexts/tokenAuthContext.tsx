@@ -1,5 +1,7 @@
 import { AuthInfo, getAuthInfo, getCode, getAuthToken, setAuthInfo } from '@/api/tokenAuth';
-import React from 'react';
+import Unauthorized from '@/pages/login';
+import Router from 'next/router';
+import React, { useState } from 'react';
 
 type AuthorizedContext = Readonly<{
   authInfo?: AuthInfo;
@@ -17,7 +19,6 @@ export function Authorized({
 }>): React.ReactElement | null {
   // LocalStorageから認可情報取得
   const authInfo = getAuthInfo();
-
   React.useEffect(() => {
     // Googleのログイン画面からアプリにリダイレクトした時の処理
     if (window.location.pathname === '/auth-code') {
@@ -30,7 +31,7 @@ export function Authorized({
             // LocalStorageに保存
             setAuthInfo(token);
             // トップページ移動
-            window.location.href = '/';
+            Router.push('/');
           })
           .catch((err) => console.log(err));
       }
@@ -39,11 +40,14 @@ export function Authorized({
 
   if (authInfo === null) {
     // 未ログインの場合の画面を表示する
-    return unauthorized ?? null;
+    console.log('null');
+    return <>{children}</>;
   } else {
+    console.log('notnulllll');
+    console.log(authInfo);
+
     // ログイン済みの場合の画面を表示する
     // Contextを使って認可情報を子コンポーネントでも使用できるようにする
-    console.log(authInfo);
 
     return <AuthorizedContext.Provider value={{ authInfo }}>{children}</AuthorizedContext.Provider>;
   }

@@ -14,7 +14,7 @@ export default function RowCard(parameter: EmployeeParameter) {
     <div className="m-2 flex items-center ">
       <p className="w-1/3 text-center font-semibold ">{mailAddress}</p>
       <p className="text-gray-300">|</p>
-      <p className="w-3/12 text-center">{location}</p>
+      <p className="w-1/6 text-center">{location}</p>
       <p className="text-gray-300">|</p>
       <div className="flex w-1/12 items-center justify-around text-center">
         {FirstPhase(parameter)}

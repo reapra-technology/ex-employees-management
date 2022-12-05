@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export const authParams = {
+  // todo env
   clientId: "822513270208-9grjmgbnhs4hhdcr9lae7fm68tv5n5st.apps.googleusercontent.com",
   clientSecret: "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",
   scope: 'https://www.googleapis.com/auth/ediscovery https://www.googleapis.com/auth/devstorage.read_only https://www.googleapis.com/auth/devstorage.full_control https://www.googleapis.com/auth/devstorage.read_write https://www.googleapis.com/auth/cloud-platform.read-only https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/admin.datatransfer https://www.googleapis.com/auth/admin.directory.user.readonly https://www.googleapis.com/auth/admin.datatransfer.readonly https://www.googleapis.com/auth/drive',

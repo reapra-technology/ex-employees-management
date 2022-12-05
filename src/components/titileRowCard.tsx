@@ -29,7 +29,7 @@ export default function TitileRowCard() {
     <div className="m-2 flex">
       <p className="w-1/3 text-center  font-bold"> MailAddress</p>
       <p className="text-gray-300">|</p>
-      <p className="w-3/12 text-center  font-bold">Location</p>
+      <p className="w-1/6 text-center  font-bold">Location</p>
       {phases.map((num, _) => {
         return (
           <>
@@ -48,6 +48,7 @@ export default function TitileRowCard() {
           </>
         );
       })}
+      <p className="text-gray-300">|</p>
     </div>
   );
 }
