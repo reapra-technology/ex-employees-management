@@ -39,9 +39,11 @@ export default function Users() {
   return (
     <>
       <TitileRowCard />
-      {employees.map((param, index) => {
-        return RowCard(param);
-      })}
+      <ul className="h-5/6 overflow-scroll">
+        {employees.map((param, index) => {
+          return <li>{RowCard(param)}</li>;
+        })}
+      </ul>
     </>
   );
 }

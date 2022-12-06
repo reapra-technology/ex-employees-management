@@ -11,12 +11,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
   res.status(200).json({ name: 'John Doe' });
 }
 
-export const getIdByMailAddress = async (mailAddress: string) => {
+export async function getIdByMailAddress(mailAddress: string): Promise<string> {
+  const sleep = (second: number) => new Promise(resolve => setTimeout(resolve, second * 1000));
+  await sleep(3);
   const token = getAuthInfo()?.access_token;
   if (token === undefined) {
     console.log('not');
 
-    return;
+    return "";
   }
   const res = await axios.get<any>(`https://admin.googleapis.com/admin/directory/v1/users/${mailAddress}`, {
     headers: { Authorization: `Bearer ${token}` },

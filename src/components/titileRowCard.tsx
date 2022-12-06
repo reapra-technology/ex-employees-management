@@ -1,9 +1,10 @@
+import AllExecuteButton from '@/components/allExecuteButton';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { useSnackbar } from '../utils/snackbar/snackbar';
 
 export default function TitileRowCard() {
   const { showSnackbar } = useSnackbar();
-  const phases = [1, 2, 3, 4];
+  const phases = [1, 2, 3];
   const showDetail = (phase: number) => {
     let content: string = '';
     switch (phase) {
@@ -13,20 +14,17 @@ export default function TitileRowCard() {
         break;
       case 2:
         content =
-          '・メールアーカイブをGoogle Driveにダウンロード\n・ドライブアーカイブをGoogle Driveにダウンロード';
+          '・メールアーカイブをGoogle Driveにダウンロード\n・ドライブアーカイブをGoogle Driveにダウンロード\n・トランスポートAPIの実行(退職者→実行者)';
         break;
       case 3:
-        content = '・　トランスポートAPIの実行(退職者→実行者)';
-        break;
-      case 4:
-        content = '・Driveデータを目的のフォルダへ移動';
+        content = '・Driveデータを目的のフォルダへ移動(実行者→目的フォルダ)';
         break;
     }
     showSnackbar(content, 'info');
   };
 
   return (
-    <div className="m-2 flex">
+    <div className="m-4 flex">
       <p className="w-1/3 text-center  font-bold"> MailAddress</p>
       <p className="text-gray-300">|</p>
       <p className="w-1/6 text-center  font-bold">Location</p>
@@ -49,6 +47,7 @@ export default function TitileRowCard() {
         );
       })}
       <p className="text-gray-300">|</p>
+      <div className="flex w-1/6 items-center justify-around text-center">{AllExecuteButton()}</div>
     </div>
   );
 }

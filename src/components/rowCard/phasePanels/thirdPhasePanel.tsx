@@ -1,9 +1,9 @@
 import ProcessingIcon from '@/components/statusIcons/processingIcon';
 import { ReactElement } from 'react';
-import EmployeeParameter from '../../api/employeeParameter';
-import CompleteIcon from '../statusIcons/completeIcon';
+import EmployeeParameter from '../../../api/employeeParameter';
+import CompleteIcon from '../../statusIcons/completeIcon';
 
-export default function ThirdPhase(param: EmployeeParameter): ReactElement {
+export default function ThirdPhasePanel(param: EmployeeParameter): ReactElement {
   const { completePhase } = param;
 
   if (completePhase >= 3) {
@@ -11,7 +11,7 @@ export default function ThirdPhase(param: EmployeeParameter): ReactElement {
   }
   if (completePhase + 1 === 3) {
     // ダウンロードの確認
-        // if done 
+    // if done
     //   firebase appdate
     //   completephase 書き換え　dispatch
     //   retrun complete
