@@ -5,7 +5,7 @@ import { SnackbarContextProvider } from '../utils/snackbar/snackbar';
 import basicAuthCheck from '../utils/basicAuthCheck';
 
 import dynamic from 'next/dynamic';
-import { ConfigProvider, Button, Layout } from 'antd';
+import { ConfigProvider, } from 'antd';
 import Unauthorized from '@/pages/login';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Authorized } from '@/components/contexts/tokenAuthContext';

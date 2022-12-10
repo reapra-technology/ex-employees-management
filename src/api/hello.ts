@@ -31,7 +31,7 @@ export async function getIdByMailAddress(mailAddress: string): Promise<string> {
 
   })
   const res = await axios.get<any>(`https://admin.googleapis.com/admin/directory/v1/users/${mailAddress}`, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: `Bearer ${token}`, },
   }).then(function (res) {
     console.log(res.data.id);
     return res.data.id;

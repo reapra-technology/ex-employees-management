@@ -26,14 +26,6 @@ export default function AdminLayout({ children }: { readonly children: ReactNode
     setCollapsed(!collapsed);
   }
 
-  useEffect(() => {
-
-    if (authInfo === undefined) {
-
-      Router.push('/login');
-    }
-  }, []);
-
   if (authInfo === undefined) {
     return <LoginLayout></LoginLayout>;
   }
