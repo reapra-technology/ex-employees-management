@@ -4,6 +4,7 @@ import fileDownload from "js-file-download";
 import JSZip from "jszip";
 
 const completeText = 'COMPLETED';
+const chankSize = 1024 * 1024 * 500; //500MB
 
 type file = {
   bucketName: string,
@@ -22,59 +23,94 @@ type archiveData = {
 // then
 // メールアーカイブをドライブにダウンロード ダウンロードID？
 // ドライブアーカイブをドライブにダウンロード　ダウンロードID？
-// トランスポートAPIを叩く ドライブAPPID 退職者、実行者ID
-// トランスポートID get
 
-export default async function executeSecondPhase(mailAddress: string, useRefreshToken: boolean = false): Promise<string> {
+
+export default async function executeSecondPhase(mailAddress: string): Promise<string> {
   const mailArchiveInfo = await getRequestedArchiveInfo();
-  console.log(mailArchiveInfo);
 
   // // exportIDを引数で分ける
-  // const driveArchiveInfo = await getRequestedArchiveInfo();
-  // if (mailAddress === '' || driveArchiveInfo === '') {
-  //   return 'error occured';
-  // }
-  // if ((mailArchiveInfo as archiveData).status !== completeText || (driveArchiveInfo as archiveData).status !== completeText) {
-  //   return 'create archive is processing';
-  // }
-  const objectName = 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-a2e65877-2a87-445d-8920-446806a31400/Email-shinnosuke.tominaga@reapra.sg-1.zip';
-  // const objectName = "de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-f6b20e65-5498-4822-a34c-39b13cfda28e/mail-novam@reapra.sg-metadata.xml";
-  // const objectName = 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-a2e65877-2a87-445d-8920-446806a31400/Email-shinnosuke.tominaga@reapra.sg-results-count.csv'
-  // const objectName = 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-a2e65877-2a87-445d-8920-446806a31400/Email-shinnosuke.tominaga@reapra.sg-metadata.csv';
-  // const objectName = 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-f6b20e65-5498-4822-a34c-39b13cfda28e/mail-novam@reapra.sg-1.zip';
-  // 10GB
-  // const objectName = 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-345c900f-ac56-4d5a-b5f9-8c66f9d3df86/drive-novam@reapra.sg_0.zip';
-  // 3.9GB
-  // const objectName = 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-345c900f-ac56-4d5a-b5f9-8c66f9d3df86/drive-novam@reapra.sg_5.zip';
-  const replacedName = objectName.replaceAll('/', '%2F');
-
-
-  // const content = await fetchWithTimeout(99999999, downloadContents("f2c7b131-88c7-4ddd-8fbb-344cba1512e0", replacedName));
-  const content = await downloadContents("f2c7b131-88c7-4ddd-8fbb-344cba1512e0", replacedName);
-  if (content === '') {
+  const driveArchiveInfo = await getRequestedArchiveInfo();
+  if (mailAddress === '' || driveArchiveInfo === '') {
     return 'error occured';
   }
-  console.log((content as Blob).type);
+  if ((mailArchiveInfo as archiveData).status !== completeText || (driveArchiveInfo as archiveData).status !== completeText) {
+    return 'create archive is processing';
+  }
 
 
-  // fileDownload(content as Blob, replacedName);
+  // const bucketName = "f2c7b131-88c7-4ddd-8fbb-344cba1512e0";
+  // const parentId = '1KtB5wX6uorD5L27nFRGj-yCjvggE83nH';
 
+  // const files: file[] = [
+  //   {
+  //     bucketName: bucketName,
+  //     objectName: 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-a2e65877-2a87-445d-8920-446806a31400/Email-shinnosuke.tominaga@reapra.sg-1.zip',
+  //     size: '21256442'
+  //   },
+  //   {
+  //     bucketName: bucketName,
+  //     objectName: 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-a2e65877-2a87-445d-8920-446806a31400/Email-shinnosuke.tominaga@reapra.sg-metadata.csv',
+  //     size: '684382'
+  //   },
+  // ];
 
-  const uploadUrl = await getUploadUrl(replacedName, '1KtB5wX6uorD5L27nFRGj-yCjvggE83nH');
+  let transferFunctions: Promise<string>[] = [];
+  const driveFolderId = ''; // todo from firebase info
+  const mailFolderId = '';
+
+  (mailArchiveInfo as archiveData).cloudStorageSink.files.forEach((file) => {
+    transferFunctions.push(transferArchiveStorageToDrive(file, mailFolderId));
+  });
+
+  (driveArchiveInfo as archiveData).cloudStorageSink.files.forEach((file) => {
+    transferFunctions.push(transferArchiveStorageToDrive(file, driveFolderId));
+  });
+
+  // files.forEach((file) => {
+  //   transferFunctions.push(transferArchiveStorageToDrive(file, parentId));
+  // });
+
+  await Promise.allSettled(transferFunctions);
+
+  return '';
+}
+
+async function transferArchiveStorageToDrive(file: file, parentFolderId: string): Promise<string> {
+  console.log(`start ${file.objectName}`);
+
+  const objectName = file.objectName.replaceAll('/', '%2F');
+  const bucketName = file.bucketName;
+  const uploadUrl = await getUploadUrl(objectName, parentFolderId);
   if (uploadUrl === '') {
     return 'error occured';
   }
 
-  await uploadObject(uploadUrl, replacedName, content as Blob);
+  const contentLength = Number(file.size);
+  const chankCount = Math.ceil(contentLength / chankSize);
 
-  // let a = [];
+  for (let i = 0; i < chankCount; i++) {
 
-  // (mailArchiveInfo as archiveData).cloudStorageSink.files.forEach((file) => {
-  //   a.push();
-  // });
+    let range: string;
+    if (i + 1 === chankCount) {
+      range = `${chankSize * i}-${contentLength - 1}`;
+    } else {
+      range = `${chankSize * i}-${(chankSize * (i + 1) - 1)}`;
+    }
 
+    await downloadContents(bucketName, objectName, range).then(async (blob: string | Blob) => {
+      if (blob === '') {
+        return 'error occured';
+      }
 
-  return '';
+      await uploadObject(uploadUrl, objectName, blob as Blob, range, contentLength);
+
+      // firebase更新処理
+    });
+  }
+  console.log(`end ${file.objectName}`);
+
+  return 'success';
+
 }
 
 async function getRequestedArchiveInfo(): Promise<archiveData | string> {
@@ -105,7 +141,7 @@ async function getRequestedArchiveInfo(): Promise<archiveData | string> {
 }
 
 
-async function downloadContents(bucketName: string, objectName: string): Promise<Blob | string> {
+async function downloadContents(bucketName: string, objectName: string, range: string): Promise<Blob | string> {
   const token = getAuthInfo()?.access_token;
   if (token === undefined) {
     return "";
@@ -117,14 +153,18 @@ async function downloadContents(bucketName: string, objectName: string): Promise
   await axios.get(url, {
     headers: {
       Authorization: `Bearer ${token}`,
-      'Content-Type': "application/json; charset=UTF-8"
+      'Content-Type': "application/json; charset=UTF-8",
+      'range': `bytes=${range}`,
     },
-    responseType: 'blob',
+    responseType: 'arraybuffer',
   }).then(async function (res) {
+    const type = getContentType(objectName);
     const content = await res.data;
-    // const data = new Blob([content], { type: type });
-    console.log(content.size, 'TTTTTTTTT');
-    result = content;
+    console.log(content);
+    const blob = new Blob([content], { type: type });
+
+    console.log(blob.size, 'TTTTTTTTT');
+    result = blob;
 
   }).catch(function (err) {
     console.log(err);
@@ -161,7 +201,7 @@ async function getUploadUrl(objectName: string, parentFolderId: string): Promise
   return result;
 }
 
-async function uploadObject(url: string, objectName: string, object: Blob): Promise<string> {
+async function uploadObject(url: string, objectName: string, object: Blob, range: string, contentLength: number): Promise<string> {
   const token = getAuthInfo()?.access_token;
   if (token === undefined) {
     return "";
@@ -173,8 +213,8 @@ async function uploadObject(url: string, objectName: string, object: Blob): Prom
   const file = object;
   formData.append('Media', file);
 
-  const res = await axios.post(url, file, {
-    headers: { Authorization: `Bearer ${token}` },
+  const res = await axios.put(url, file, {
+    headers: { Authorization: `Bearer ${token}`, 'Content-Range': `bytes ${range}/${contentLength}`, },
   },).then(function (res) {
   }).catch(function (err) {
     result = '';
@@ -195,25 +235,4 @@ function getContentType(objectName: string): string {
     default:
       return '';
   }
-}
-
-async function fetchWithTimeout(ms: number = 999999999999999, promise: Promise<any>): Promise<any> {
-  return await new Promise((resolve, reject) => {
-    const timer = setTimeout(() => {
-      reject(new Error('TIMEOUT'))
-    }, ms)
-
-    promise
-      .then(value => {
-        clearTimeout(timer)
-        resolve(value)
-        return value;
-      })
-      .catch(reason => {
-        console.log(reason);
-        clearTimeout(timer)
-        reject(reason)
-        return reason;
-      })
-  })
 }

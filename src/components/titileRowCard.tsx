@@ -4,7 +4,7 @@ import { useSnackbar } from '../utils/snackbar/snackbar';
 
 export default function TitileRowCard() {
   const { showSnackbar } = useSnackbar();
-  const phases = [1, 2, 3];
+  const phases = [1, 2, 3, 4];
   const showDetail = (phase: number) => {
     let content: string = '';
     switch (phase) {
@@ -17,6 +17,9 @@ export default function TitileRowCard() {
           '・メールアーカイブをGoogle Driveにダウンロード\n・ドライブアーカイブをGoogle Driveにダウンロード\n・トランスポートAPIの実行(退職者→実行者)';
         break;
       case 3:
+        content = '・トランスポートAPIの実行(退職者→実行者)';
+        break;
+      case 4:
         content = '・Driveデータを目的のフォルダへ移動(実行者→目的フォルダ)';
         break;
     }

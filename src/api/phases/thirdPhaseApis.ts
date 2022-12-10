@@ -8,8 +8,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
   res.status(200).json({ name: 'John Doe' });
 }
 
+
 // メールダウンロード状況を確認　要検討　in ダウンロードID？
 // ドライブダウンロード状況を確認　要検討
-// トランスポート状況の確認
-// then
-// 実行者から目的のフォルダへ
+// トランスポートAPIを叩く ドライブAPPID 退職者、実行者ID
+// トランスポートID get
+
+
+
