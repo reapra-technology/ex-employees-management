@@ -37,10 +37,10 @@ export default async function executeSecondPhase(mailAddress: string, useRefresh
   // if ((mailArchiveInfo as archiveData).status !== completeText || (driveArchiveInfo as archiveData).status !== completeText) {
   //   return 'create archive is processing';
   // }
-  // const objectName = 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-a2e65877-2a87-445d-8920-446806a31400/Email-shinnosuke.tominaga@reapra.sg-1.zip';
+  const objectName = 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-a2e65877-2a87-445d-8920-446806a31400/Email-shinnosuke.tominaga@reapra.sg-1.zip';
   // const objectName = "de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-f6b20e65-5498-4822-a34c-39b13cfda28e/mail-novam@reapra.sg-metadata.xml";
   // const objectName = 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-a2e65877-2a87-445d-8920-446806a31400/Email-shinnosuke.tominaga@reapra.sg-results-count.csv'
-  const objectName = 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-a2e65877-2a87-445d-8920-446806a31400/Email-shinnosuke.tominaga@reapra.sg-metadata.csv';
+  // const objectName = 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-a2e65877-2a87-445d-8920-446806a31400/Email-shinnosuke.tominaga@reapra.sg-metadata.csv';
   // const objectName = 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-f6b20e65-5498-4822-a34c-39b13cfda28e/mail-novam@reapra.sg-1.zip';
   // 10GB
   // const objectName = 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-345c900f-ac56-4d5a-b5f9-8c66f9d3df86/drive-novam@reapra.sg_0.zip';
@@ -114,14 +114,14 @@ async function downloadContents(bucketName: string, objectName: string): Promise
   const url =
     `https://storage.googleapis.com/storage/v1/b/${bucketName}/o/${objectName}?alt=media`;
 
-  await fetch(url, {
-    method: "GET",
+  await axios.get(url, {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': "application/json; charset=UTF-8"
-    }
+    },
+    responseType: 'blob',
   }).then(async function (res) {
-    const content = await res.blob();
+    const content = await res.data;
     // const data = new Blob([content], { type: type });
     console.log(content.size, 'TTTTTTTTT');
     result = content;
