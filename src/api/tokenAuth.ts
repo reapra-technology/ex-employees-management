@@ -76,6 +76,33 @@ export async function getAuthToken(code: string): Promise<AuthInfo> {
   return res.data as Promise<AuthInfo>;
 }
 
+export async function getTokenFromByRefreshToken(): Promise<void> {
+  const currentInfo = getAuthInfo();
+  const params = {
+    client_id: authParams.clientId,
+    client_secret: authParams.clientSecret,
+    redirect_uri: authParams.redirectUri,
+    grant_type: "refresh_token",
+    access_type: authParams.accessType,
+    refresh_token: currentInfo?.refresh_token,
+  };
+  const res = await axios.post(
+    `https://www.googleapis.com/oauth2/v4/token`,
+    params
+  );
+  console.log(res.data);
+  const newInfo: AuthInfo = {
+    access_token: res.data.access_token,
+    refresh_token: currentInfo?.refresh_token ?? "",
+    expires_in: currentInfo?.expires_in ?? 0,
+    scope: currentInfo?.scope ?? '',
+    token_type: currentInfo?.token_type ?? '',
+    id_token: currentInfo?.id_token ?? '',
+  }
+
+  setAuthInfo(newInfo);
+}
+
 export async function signOut(authInfo: AuthInfo | undefined): Promise<void> {
   try {
     if (authInfo !== undefined) {

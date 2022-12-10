@@ -27,10 +27,8 @@ export default function AdminLayout({ children }: { readonly children: ReactNode
   }
 
   useEffect(() => {
-    console.log(authInfo);
 
     if (authInfo === undefined) {
-      console.log('rrrrr');
 
       Router.push('/login');
     }

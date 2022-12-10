@@ -10,7 +10,6 @@ export default function Unauthorized(): React.ReactElement {
   if (authInfo != null) {
     return <a></a>;
   }
-  console.log('builddldldldldl');
 
   return (
     <div>
