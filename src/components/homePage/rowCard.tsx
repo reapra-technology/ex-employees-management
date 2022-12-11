@@ -1,9 +1,9 @@
-import ExecuteButton from '@/components/rowCard/executeButton';
-import FourthPhasePanel from '@/components/rowCard/phasePanels/fourthPhasePanel';
-import SecondPhasePanel from '@/components/rowCard/phasePanels/secondPhasePanel';
-import ThirdPhasePanel from '@/components/rowCard/phasePanels/thirdPhasePanel';
-import EmployeeParameter from '../../api/employeeParameter';
-import FirstPhasePanel from './phasePanels/firstPhasePanel';
+import ExecuteButton from '@/components/homePage/executeButton';
+import FirstPhasePanel from '@/components/homePage/phasePanels/firstPhasePanel';
+import FourthPhasePanel from '@/components/homePage/phasePanels/fourthPhasePanel';
+import SecondPhasePanel from '@/components/homePage/phasePanels/secondPhasePanel';
+import ThirdPhasePanel from '@/components/homePage/phasePanels/thirdPhasePanel';
+import EmployeeParameter from '@/types/employeeParameter';
 
 export default function RowCard(parameter: EmployeeParameter) {
   const { mailAddress, location } = parameter;

@@ -1,6 +1,6 @@
-import AllExecuteButton from '@/components/allExecuteButton';
+import AllExecuteButton from '@/components/homePage/allExecuteButton';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { useSnackbar } from '../utils/snackbar/snackbar';
+import { useSnackbar } from '../../utils/snackbar/snackbar';
 
 export default function TitileRowCard() {
   const { showSnackbar } = useSnackbar();
@@ -23,7 +23,7 @@ export default function TitileRowCard() {
         content = '・Driveデータを目的のフォルダへ移動(実行者→目的フォルダ)';
         break;
     }
-    showSnackbar(content, 'info');
+    showSnackbar(content, 'info', 10000);
   };
 
   return (

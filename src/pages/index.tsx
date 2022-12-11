@@ -1,6 +1,6 @@
-import TitileRowCard from '@/components/titileRowCard';
-import EmployeeParameter from '../api/employeeParameter';
-import RowCard from '../components/rowCard/rowCard';
+import TitileRowCard from '@/components/homePage/titileRowCard';
+import EmployeeParameter from '../types/employeeParameter';
+import RowCard from '../components/homePage/rowCard';
 
 export default function Users() {
   const employees: EmployeeParameter[] = [

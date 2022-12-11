@@ -5,10 +5,11 @@ import { SnackbarContextProvider } from '../utils/snackbar/snackbar';
 import basicAuthCheck from '../utils/basicAuthCheck';
 
 import dynamic from 'next/dynamic';
-import { ConfigProvider, } from 'antd';
+import { ConfigProvider } from 'antd';
 import Unauthorized from '@/pages/login';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Authorized } from '@/components/contexts/tokenAuthContext';
+import { RecoilRoot } from 'recoil';
 
 const AdminLayout = dynamic(() => import('../layouts/adminLayout'), {
   ssr: false,
@@ -17,23 +18,25 @@ const AdminLayout = dynamic(() => import('../layouts/adminLayout'), {
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const queryClient = new QueryClient();
   return (
-    <QueryClientProvider client={queryClient}>
-      <Authorized unauthorized={<Unauthorized />}>
-        <ConfigProvider
-          theme={{
-            token: {
-              colorPrimary: '#6d9f71',
-            },
-          }}
-        >
-          <SnackbarContextProvider>
-            <AdminLayout>
-              <Component {...pageProps} />
-            </AdminLayout>
-          </SnackbarContextProvider>
-        </ConfigProvider>
-      </Authorized>
-    </QueryClientProvider>
+    <RecoilRoot>
+      <QueryClientProvider client={queryClient}>
+        <Authorized unauthorized={<Unauthorized />}>
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary: '#6d9f71',
+              },
+            }}
+          >
+            <SnackbarContextProvider>
+              <AdminLayout>
+                <Component {...pageProps} />
+              </AdminLayout>
+            </SnackbarContextProvider>
+          </ConfigProvider>
+        </Authorized>
+      </QueryClientProvider>
+    </RecoilRoot>
   );
 }
 

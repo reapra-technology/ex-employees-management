@@ -1,7 +1,8 @@
-import ProcessingIcon from '@/components/statusIcons/processingIcon';
+import ProcessingIcon from '@/components/homePage/statusIcons/processingIcon';
 import { ReactElement } from 'react';
-import EmployeeParameter from '../../../api/employeeParameter';
-import CompleteIcon from '../../statusIcons/completeIcon';
+import EmployeeParameter from '../../../types/employeeParameter';
+
+import CompleteIcon from '../statusIcons/completeIcon';
 
 export default function FourthPhasePanel(param: EmployeeParameter): ReactElement {
   const { completePhase } = param;

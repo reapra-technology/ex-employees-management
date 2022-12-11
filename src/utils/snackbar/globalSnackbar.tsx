@@ -15,6 +15,8 @@ type Props = {
   /** スナックバーに表示するメッセージ */
   message: string;
 
+  duration: number;
+
   /** スナックバーの色 (error | warning | info | success) */
   severity?: AlertColor;
 
@@ -23,12 +25,18 @@ type Props = {
 };
 
 /** スナックバーを表示するコンポーネント */
-export const GlobalSnackbar: React.FC<Props> = ({ open, message, severity = 'info', onClose }) => {
+export const GlobalSnackbar: React.FC<Props> = ({
+  open,
+  message,
+  severity = 'info',
+  duration,
+  onClose,
+}) => {
   return (
     <Snackbar
       open={open}
       onClose={onClose}
-      autoHideDuration={60000}
+      autoHideDuration={duration}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
     >
       <Alert severity={severity}>{message}</Alert>
