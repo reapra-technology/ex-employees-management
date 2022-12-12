@@ -1,4 +1,5 @@
 import { useSettingActions } from '@/store/settingParameter/settingActions';
+import { reapraPrimaryColor } from '@/utils/color';
 import { useSnackbar } from '@/utils/snackbar/snackbar';
 import { Button } from 'antd';
 
@@ -29,7 +30,7 @@ export default function EditButton(isEditing: boolean, setEditMode: (value: bool
         </div>
       ) : (
         <Button
-          style={{ backgroundColor: '#6D9F71', color: '#fff' }}
+          style={{ backgroundColor: reapraPrimaryColor, color: '#fff' }}
           onClick={() => setEditMode(true)}
         >
           編集

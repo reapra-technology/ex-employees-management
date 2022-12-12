@@ -1,6 +1,7 @@
 // layouts/adminLayout.tsx
 import { AuthorizedContext } from '@/components/contexts/tokenAuthContext';
 import LoginLayout from '@/layouts/loginLayout';
+import { reapraMainColor } from '@/utils/color';
 import {
   UserOutlined,
   MenuFoldOutlined,
@@ -36,7 +37,7 @@ export default function AdminLayout({ children }: { readonly children: ReactNode
         trigger={null}
         collapsible
         collapsed={collapsed}
-        style={{ backgroundColor: '#06262D' }}
+        style={{ backgroundColor: reapraMainColor }}
       >
         <div className={styles.logo}>
           <Link href="/">
@@ -47,7 +48,7 @@ export default function AdminLayout({ children }: { readonly children: ReactNode
           theme="dark"
           mode="inline"
           selectedKeys={[router.pathname]}
-          style={{ backgroundColor: '#06262D' }}
+          style={{ backgroundColor: reapraMainColor }}
         >
           <Menu.Item key="/" icon={<UserOutlined />}>
             <Link href="/">Home</Link>
@@ -58,7 +59,7 @@ export default function AdminLayout({ children }: { readonly children: ReactNode
         </Menu>
       </Sider>
       <Layout className="site-layout">
-        <Header className={styles.siteLayoutBackground} style={{ backgroundColor: '#06262D' }}>
+        <Header className={styles.siteLayoutBackground} style={{ backgroundColor: reapraMainColor }}>
           {collapsed ? (
             <MenuUnfoldOutlined className={styles.trigger} onClick={toggle} />
           ) : (

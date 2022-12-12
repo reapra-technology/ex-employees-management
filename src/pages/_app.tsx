@@ -10,6 +10,7 @@ import Unauthorized from '@/pages/login';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Authorized } from '@/components/contexts/tokenAuthContext';
 import { RecoilRoot } from 'recoil';
+import { reapraPrimaryColor } from '@/utils/color';
 
 const AdminLayout = dynamic(() => import('../layouts/adminLayout'), {
   ssr: false,
@@ -24,7 +25,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
           <ConfigProvider
             theme={{
               token: {
-                colorPrimary: '#6d9f71',
+                colorPrimary: reapraPrimaryColor,
               },
             }}
           >
