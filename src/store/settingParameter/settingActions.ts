@@ -18,10 +18,12 @@ export const useSettingActions = () => {
   const [state, setState] = useRecoilState(settingState);
   const [editingState, setEditingState] = useRecoilState(editingSettingState);
   const fetchSetting = async () => {
+    console.log(state, 'kkkk');
     if (state !== undefined) {
       return;
     }
     const setting = await fetchSettingFromDB();
+    console.log(setting);
     setState(setting);
     setEditingState(setting);
   }

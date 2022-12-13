@@ -1,6 +1,8 @@
 // layouts/adminLayout.tsx
 import { AuthorizedContext } from '@/components/contexts/tokenAuthContext';
 import LoginLayout from '@/layouts/loginLayout';
+import { useRunningOptionActions } from '@/store/runningOption/runnigOptionActions';
+import { RunningOption } from '@/types/runningOption';
 import { reapraMainColor } from '@/utils/color';
 import {
   UserOutlined,
@@ -20,12 +22,23 @@ const { Header, Sider, Content } = Layout;
 export default function AdminLayout({ children }: { readonly children: ReactNode }) {
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const router = useRouter();
+  const { setOption } = useRunningOptionActions();
 
   const { authInfo } = React.useContext(AuthorizedContext);
 
   function toggle() {
     setCollapsed(!collapsed);
   }
+
+  useEffect(() => {
+    if (process.browser) {
+      const item = window.localStorage.getItem('runningOption');
+      if (item !== null) {
+        const option = JSON.parse(item) as RunningOption;
+        setOption(option);
+      }
+    }
+  }, []);
 
   if (authInfo === undefined) {
     return <LoginLayout></LoginLayout>;
@@ -59,7 +72,10 @@ export default function AdminLayout({ children }: { readonly children: ReactNode
         </Menu>
       </Sider>
       <Layout className="site-layout">
-        <Header className={styles.siteLayoutBackground} style={{ backgroundColor: reapraMainColor }}>
+        <Header
+          className={styles.siteLayoutBackground}
+          style={{ backgroundColor: reapraMainColor }}
+        >
           {collapsed ? (
             <MenuUnfoldOutlined className={styles.trigger} onClick={toggle} />
           ) : (

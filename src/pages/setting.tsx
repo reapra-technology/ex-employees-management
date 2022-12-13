@@ -6,6 +6,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { editingSettingState, settingState } from '@/store/settingParameter/settingState';
 import { targetValue, useSettingActions } from '@/store/settingParameter/settingActions';
 import EditButton from '@/components/settingPage/editButton';
+import RunOptions from '@/components/settingPage/runOptions/runOptions';
 
 export default function Setting() {
   const { fetchSetting, editingState } = useSettingActions();
@@ -18,6 +19,7 @@ export default function Setting() {
 
   return (
     <div className="h-full overflow-scroll">
+      {RunOptions()}
       {HorizontalDivider()}
       <div className="m-4 flex">
         {ShowAllButton(showAllContent, setShowAllContent)}
