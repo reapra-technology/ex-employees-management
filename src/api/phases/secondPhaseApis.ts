@@ -1,7 +1,5 @@
 import { getAuthInfo } from "@/api/tokenAuth";
 import axios from "axios";
-import fileDownload from "js-file-download";
-import JSZip from "jszip";
 
 const completeText = 'COMPLETED';
 const chankSize = 1024 * 1024 * 500; //500MB

@@ -3,9 +3,11 @@ import FirstPhasePanel from '@/components/homePage/phasePanels/firstPhasePanel';
 import FourthPhasePanel from '@/components/homePage/phasePanels/fourthPhasePanel';
 import SecondPhasePanel from '@/components/homePage/phasePanels/secondPhasePanel';
 import ThirdPhasePanel from '@/components/homePage/phasePanels/thirdPhasePanel';
-import EmployeeParameter from '@/types/employeeParameter';
+import User from '@/types/user';
 
-export default function RowCard(parameter: EmployeeParameter) {
+export default function RowCard(
+  parameter: User,
+) {
   const { mailAddress, location } = parameter;
 
   return (
@@ -30,7 +32,9 @@ export default function RowCard(parameter: EmployeeParameter) {
         {FourthPhasePanel(parameter)}
       </div>
       <p className="text-gray-300">|</p>
-      <div className="flex w-1/6 items-center justify-around text-center">{ExecuteButton()}</div>
+      <div className="flex w-1/6 items-center justify-around text-center">
+        {ExecuteButton(parameter)}
+      </div>
     </div>
   );
 }

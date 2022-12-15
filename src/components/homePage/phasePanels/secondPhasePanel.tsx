@@ -1,10 +1,10 @@
 import ProcessingIcon from '@/components/homePage/statusIcons/processingIcon';
 import { ReactElement } from 'react';
-import EmployeeParameter from '../../../types/employeeParameter';
+import User from '../../../types/user';
 
 import CompleteIcon from '../statusIcons/completeIcon';
 
-export default function SecondPhasePanel(param: EmployeeParameter): ReactElement {
+export default function SecondPhasePanel(param: User): ReactElement {
   const { completePhase } = param;
 
   if (completePhase >= 2) {

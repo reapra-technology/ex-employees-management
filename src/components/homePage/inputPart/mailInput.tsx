@@ -1,3 +1,4 @@
+import { getTokenFromByRefreshToken } from '@/api/tokenAuth';
 import { getUserList } from '@/api/userList';
 import { Box, Input } from '@mui/material';
 import React, { useEffect, useMemo } from 'react';
@@ -13,6 +14,7 @@ export default function MailInput(value: string, onChange: (value: string) => vo
   }, []);
 
   const fetchUsers = useMemo(async () => {
+    getTokenFromByRefreshToken();
     const results = await getUserList();
     setUsers(results);
   }, []);

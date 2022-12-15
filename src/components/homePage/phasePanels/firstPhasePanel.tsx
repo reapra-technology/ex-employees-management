@@ -1,8 +1,8 @@
 import { ReactElement } from 'react';
-import EmployeeParameter from '../../../types/employeeParameter';
+import User from '../../../types/user';
 import CompleteIcon from '../statusIcons/completeIcon';
 
-export default function FirstPhasePanel(param: EmployeeParameter): ReactElement {
+export default function FirstPhasePanel(param: User): ReactElement {
   const { completePhase } = param;
 
   if (completePhase >= 1) {
