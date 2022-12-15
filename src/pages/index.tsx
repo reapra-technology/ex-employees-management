@@ -1,6 +1,8 @@
 import TitileRowCard from '@/components/homePage/titileRowCard';
 import EmployeeParameter from '../types/employeeParameter';
 import RowCard from '../components/homePage/rowCard';
+import AddExEmployee from '@/components/homePage/addExEmployee';
+import HorizontalDivider from '@/components/common/horizontalDivider';
 
 export default function Users() {
   const employees: EmployeeParameter[] = [
@@ -38,8 +40,10 @@ export default function Users() {
 
   return (
     <>
+      <AddExEmployee />
+      {HorizontalDivider()}
       <TitileRowCard />
-      <ul className="h-5/6 overflow-scroll">
+      <ul className="h-2/3 overflow-scroll">
         {employees.map((param, index) => {
           return <li>{RowCard(param)}</li>;
         })}

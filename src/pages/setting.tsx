@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import ContentCard from '@/components/settingPage/contentCard';
-import HorizontalDivider from '@/components/settingPage/horizontalDivider';
+import HorizontalDivider from '@/components/common/horizontalDivider';
 import ShowAllButton from '@/components/settingPage/showAllButton';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { editingSettingState, settingState } from '@/store/settingParameter/settingState';
