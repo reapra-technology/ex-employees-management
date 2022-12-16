@@ -1,10 +1,20 @@
-import { usersState } from "@/store/user/usersState";
-import User from "@/types/user";
 import { useRecoilState } from "recoil";
+import { RecoilAtomKeys } from "@/store/RecoilKeys";
+import User from "@/types/user";
+import { atom } from "recoil";
 
 
 
-export const useUserActions = () => {
+export const usersState = atom<User[]>({
+  key: RecoilAtomKeys.USERS_STATE,
+  default: [],
+});
+
+
+
+
+
+export const useUsersActions = () => {
   const [state, setState] = useRecoilState(usersState);
 
   const addUser = (mailAddress: string, location: string) => {
@@ -17,6 +27,6 @@ export const useUserActions = () => {
     // firebase処理
   }
 
-
   return { users: state, addUser: addUser };
+
 }

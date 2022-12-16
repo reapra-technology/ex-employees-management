@@ -1,6 +1,6 @@
 import { RecoilAtomKeys } from '@/store/RecoilKeys';
 import { atom } from 'recoil';
-import { usersState } from '@/store/user/usersState';
+import { usersState } from '@/store/users';
 import User from '@/types/user';
 import { useRecoilState } from 'recoil';
 

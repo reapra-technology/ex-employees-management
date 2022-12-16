@@ -1,4 +1,4 @@
-import { useSettingActions } from '@/store/settingParameter/settingActions';
+import { useSettingActions } from '@/store/setting';
 import { Button } from 'antd';
 import { useEffect, useState } from 'react';
 

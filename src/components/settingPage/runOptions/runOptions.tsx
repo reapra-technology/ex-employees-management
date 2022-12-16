@@ -1,7 +1,7 @@
 import ConcurrentCard from '@/components/settingPage/runOptions/concurrentCard';
 import OptionCard from '@/components/settingPage/runOptions/optionCard';
-import { targetOption } from '@/store/runningOption/runnigOptionActions';
-import { runningOptionState } from '@/store/runningOption/runningOptionState';
+import { targetOption } from '@/store/runningOption';
+import { runningOptionState } from '@/store/runningOption';
 import { useRecoilState } from 'recoil';
 
 export default function RunOptions() {

@@ -1,5 +1,5 @@
 import Toggle from '@/components/settingPage/runOptions/toggle';
-import { targetOption, useRunningOptionActions } from '@/store/runningOption/runnigOptionActions';
+import { targetOption, useRunningOptionActions } from '@/store/runningOption';
 
 export default function OptionCard(value: boolean, target: targetOption, title: string) {
   const { changeOption } = useRunningOptionActions();

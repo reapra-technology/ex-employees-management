@@ -3,8 +3,8 @@ import ContentCard from '@/components/settingPage/contentCard';
 import HorizontalDivider from '@/components/common/horizontalDivider';
 import ShowAllButton from '@/components/settingPage/showAllButton';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { editingSettingState, settingState } from '@/store/settingParameter/settingState';
-import { targetValue, useSettingActions } from '@/store/settingParameter/settingActions';
+import { editingSettingState, settingState } from '@/store/setting';
+import { targetValue, useSettingActions } from '@/store/setting';
 import EditButton from '@/components/settingPage/editButton';
 import RunOptions from '@/components/settingPage/runOptions/runOptions';
 

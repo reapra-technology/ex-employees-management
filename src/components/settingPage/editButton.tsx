@@ -1,4 +1,4 @@
-import { useSettingActions } from '@/store/settingParameter/settingActions';
+import { useSettingActions } from '@/store/setting';
 import { reapraPrimaryColor } from '@/utils/color';
 import { useSnackbar } from '@/utils/snackbar/snackbar';
 import { Button } from 'antd';

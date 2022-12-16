@@ -1,4 +1,4 @@
-import { useRunningOptionActions } from '@/store/runningOption/runnigOptionActions';
+import { useRunningOptionActions } from '@/store/runningOption';
 import { reapraPrimaryColor } from '@/utils/color';
 import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';

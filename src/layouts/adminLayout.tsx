@@ -1,7 +1,7 @@
 // layouts/adminLayout.tsx
 import { AuthorizedContext } from '@/components/contexts/tokenAuthContext';
 import LoginLayout from '@/layouts/loginLayout';
-import { useRunningOptionActions } from '@/store/runningOption/runnigOptionActions';
+import { useRunningOptionActions } from '@/store/runningOption';
 import { RunningOption } from '@/types/runningOption';
 import { reapraMainColor } from '@/utils/color';
 import {

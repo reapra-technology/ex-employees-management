@@ -1,9 +1,14 @@
-import { fetchSettingFromDB, updateSetting } from "@/firebase/functions";
-import { runningOptionState } from "@/store/runningOption/runningOptionState";
-import { editingSettingState, settingState } from "@/store/settingParameter/settingState";
-import { RunningOption } from "@/types/runningOption";
-import { SettingParameter } from "@/types/settingParameter";
 import { useRecoilState } from "recoil";
+import { RecoilAtomKeys } from "@/store/RecoilKeys";
+import { RunningOption } from "@/types/runningOption";
+import { atom } from "recoil";
+
+
+
+export const runningOptionState = atom<RunningOption>({
+  key: RecoilAtomKeys.RUNNING_OPTION_STATE,
+  default: { removeFinishedEmployee: false, rungNextEmployee: false, runNextPhase: false, concurrentNumber: 1, }
+});
 
 
 export enum targetOption {

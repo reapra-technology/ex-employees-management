@@ -1,6 +1,6 @@
 import { LocationInput } from '@/components/homePage/inputPart/locationInput';
 import MailInput from '@/components/homePage/inputPart/mailInput';
-import { useUserActions } from '@/store/user/userActions';
+import { useUsersActions } from '@/store/users';
 import { useSnackbar } from '@/utils/snackbar/snackbar';
 import { Button } from 'antd';
 import { useState } from 'react';
@@ -9,7 +9,7 @@ export default function AddExEmployee() {
   const [mailAddress, setMailAddress] = useState<string>('');
   const [location, setLocation] = useState<string>('');
 
-  const { users, addUser } = useUserActions();
+  const { users, addUser } = useUsersActions();
   const { showSnackbar } = useSnackbar();
 
   const add = () => {

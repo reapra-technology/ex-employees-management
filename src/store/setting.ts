@@ -1,7 +1,7 @@
-import { fetchSettingFromDB, updateSetting } from "@/firebase/functions";
-import { editingSettingState, settingState } from "@/store/settingParameter/settingState";
+import { RecoilAtomKeys } from "@/store/RecoilKeys";
 import { SettingParameter } from "@/types/settingParameter";
-import { Firestore } from "firebase/firestore";
+import { atom } from "recoil";
+import { fetchSettingFromDB, updateSetting } from "@/firebase/functions";
 import { useRecoilState } from "recoil";
 
 
@@ -14,11 +14,22 @@ export enum targetValue {
   VN_FOLDER_ID = 'VN FOLDER ID',
 }
 
+export const settingState = atom<SettingParameter | undefined>({
+  key: RecoilAtomKeys.SETTING_STATE,
+  default: undefined
+});
+
+export const editingSettingState = atom<SettingParameter | undefined>({
+  key: RecoilAtomKeys.EDITING_SETTING_STATE,
+  default: undefined,
+})
+
+
+
 export const useSettingActions = () => {
   const [state, setState] = useRecoilState(settingState);
   const [editingState, setEditingState] = useRecoilState(editingSettingState);
   const fetchSetting = async () => {
-    console.log(state, 'kkkk');
     if (state !== undefined) {
       return;
     }

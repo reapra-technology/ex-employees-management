@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 import { Switch } from '@headlessui/react';
-import { targetOption, useRunningOptionActions } from '@/store/runningOption/runnigOptionActions';
+import { targetOption, useRunningOptionActions } from '@/store/runningOption';
 
 export default function Toggle(value: boolean, target: targetOption) {
   const { changeOption } = useRunningOptionActions();
