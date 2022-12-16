@@ -1,7 +1,5 @@
 import { RecoilAtomKeys } from '@/store/RecoilKeys';
 import { atom } from 'recoil';
-import { usersState } from '@/store/users';
-import User from '@/types/user';
 import { useRecoilState } from 'recoil';
 
 export const processingUsersState = atom<string[]>({
@@ -20,10 +18,9 @@ export const useProcessingUsersActions = () => {
 
   const removeProcessingUsers = (mailAddress: string) => {
     setState((prev) => {
+      const index = prev.findIndex((address) => address === mailAddress);
       const newUsers = [...prev];
-      newUsers.filter(function (address) {
-        return address !== mailAddress;
-      });
+      newUsers.splice(index, 1);
       return newUsers;
     });
   };

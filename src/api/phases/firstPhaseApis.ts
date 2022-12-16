@@ -22,7 +22,6 @@ export async function executeFirstPhase(mailAdress: string, location: string): P
   // }
 
   const mailArchiveId = await requestArchive(mailAdress, false);
-  console.log(mailArchiveId);
 
   // const driveArchiveId = await requestArchive(mailAdress, true);
 

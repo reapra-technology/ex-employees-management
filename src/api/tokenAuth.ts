@@ -90,7 +90,6 @@ export async function getTokenFromByRefreshToken(): Promise<void> {
     `https://www.googleapis.com/oauth2/v4/token`,
     params
   );
-  console.log(res.data);
   const newInfo: AuthInfo = {
     access_token: res.data.access_token,
     refresh_token: currentInfo?.refresh_token ?? "",

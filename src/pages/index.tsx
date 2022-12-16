@@ -4,7 +4,6 @@ import RowCard from '../components/homePage/rowCard';
 import AddExEmployee from '@/components/homePage/addExEmployee';
 import HorizontalDivider from '@/components/common/horizontalDivider';
 import { useUsersActions } from '@/store/users';
-import { useState } from 'react';
 import { useProcessingUsersActions } from '@/store/processingUsers';
 
 export default function Users() {
