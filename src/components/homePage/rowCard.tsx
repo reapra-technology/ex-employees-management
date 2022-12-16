@@ -3,6 +3,7 @@ import FirstPhasePanel from '@/components/homePage/phasePanels/firstPhasePanel';
 import FourthPhasePanel from '@/components/homePage/phasePanels/fourthPhasePanel';
 import SecondPhasePanel from '@/components/homePage/phasePanels/secondPhasePanel';
 import ThirdPhasePanel from '@/components/homePage/phasePanels/thirdPhasePanel';
+import { PhaseCompleteActions, targetUserState } from '@/store/users';
 import User from '@/types/user';
 
 export default function RowCard(
@@ -10,6 +11,8 @@ export default function RowCard(
   processingUsers: string[],
   addProcessing: (mail: string) => void,
   removeProcessing: (mail: string) => void,
+  getLocationFolderId: (location: string) => string,
+  phaseCompleteActions:PhaseCompleteActions,
 ) {
   const { mailAddress, location } = parameter;
 
@@ -36,7 +39,14 @@ export default function RowCard(
       </div>
       <p className="text-gray-300">|</p>
       <div className="flex w-1/6 items-center justify-around text-center">
-        {ExecuteButton(parameter, processingUsers, addProcessing,removeProcessing)}
+        {ExecuteButton(
+          parameter,
+          processingUsers,
+          addProcessing,
+          removeProcessing,
+          getLocationFolderId,
+          phaseCompleteActions,
+        )}
       </div>
     </div>
   );

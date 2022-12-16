@@ -24,8 +24,6 @@ export const editingSettingState = atom<SettingParameter | undefined>({
   default: undefined,
 })
 
-
-
 export const useSettingActions = () => {
   const [state, setState] = useRecoilState(settingState);
   const [editingState, setEditingState] = useRecoilState(editingSettingState);
@@ -65,7 +63,20 @@ export const useSettingActions = () => {
   const onCanceled = () => {
     setEditingState(state);
     console.log(editingState?.client_id);
-
   }
-  return { fetchSetting: fetchSetting, editSettting: editSettting, onCompleted: onCompleted, onCanceled: onCanceled, editingState: editingState };
+
+  const getLocationFolderId = function (target: string): string {
+    switch (target) {
+      case 'JP':
+        return state?.jp_folder_id ?? '';
+      case 'SG':
+        return state?.sg_folder_id ?? '';
+      case 'VN':
+        return state?.vn_folder_id ?? '';
+    }
+    return '';
+  }
+
+
+  return { fetchSetting: fetchSetting, editSettting: editSettting, onCompleted: onCompleted, onCanceled: onCanceled, editingState: editingState, getLocationFolderId: getLocationFolderId };
 }

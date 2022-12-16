@@ -2,6 +2,8 @@
 import { AuthorizedContext } from '@/components/contexts/tokenAuthContext';
 import LoginLayout from '@/layouts/loginLayout';
 import { useRunningOptionActions } from '@/store/runningOption';
+import { useSettingActions } from '@/store/setting';
+import { useUsersActions } from '@/store/users';
 import { RunningOption } from '@/types/runningOption';
 import { reapraMainColor } from '@/utils/color';
 import {
@@ -23,6 +25,8 @@ export default function AdminLayout({ children }: { readonly children: ReactNode
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const router = useRouter();
   const { setOption } = useRunningOptionActions();
+  const { fetchSetting } = useSettingActions();
+  const { fetchUsers } = useUsersActions();
 
   const { authInfo } = React.useContext(AuthorizedContext);
 
@@ -38,6 +42,8 @@ export default function AdminLayout({ children }: { readonly children: ReactNode
         setOption(option);
       }
     }
+    fetchSetting();
+    fetchUsers();
   }, []);
 
   if (authInfo === undefined) {

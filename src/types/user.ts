@@ -1,6 +1,7 @@
 
 
 type User = {
+  id: string;
   mailAddress: string;
   location: string;
   completePhase?: number;

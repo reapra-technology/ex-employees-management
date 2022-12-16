@@ -9,13 +9,9 @@ import EditButton from '@/components/settingPage/editButton';
 import RunOptions from '@/components/settingPage/runOptions/runOptions';
 
 export default function Setting() {
-  const { fetchSetting, editingState } = useSettingActions();
+  const { editingState } = useSettingActions();
   const [showAllContent, setShowAllContent] = useState(false);
   const [isEditingMode, setIsEditingMode] = useState(false);
-
-  useEffect(() => {
-    fetchSetting();
-  }, []);
 
   return (
     <div className="h-full overflow-scroll">

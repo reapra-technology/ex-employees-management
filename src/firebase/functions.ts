@@ -1,6 +1,7 @@
 import { SettingParameter } from "@/types/settingParameter";
 import { db } from "../../firebase";
-import { collection, doc, Firestore, getDocs, getFirestore, QuerySnapshot, setDoc } from "firebase/firestore";
+import { collection, doc, Firestore, getDocs, getFirestore, QuerySnapshot, setDoc, updateDoc } from "firebase/firestore";
+import User from "@/types/user";
 
 export async function fetchSettingFromDB(): Promise<SettingParameter | undefined> {
   const settingsCollectionRef = collection(db, 'settings');
@@ -11,8 +12,20 @@ export async function fetchSettingFromDB(): Promise<SettingParameter | undefined
   return result.docs[0].data() as SettingParameter;
 }
 
+export async function fetchUsersFromDB(): Promise<User[]> {
+  const settingsCollectionRef = collection(db, 'users');
+  const result = await getDocs(settingsCollectionRef);
+  let users: User[] = [];
+  if (result.empty) {
+    return [];
+  }
+  result.docs.forEach((doc) => {
+    users.push(doc.data() as User);
+  });
+  return users;
+}
+
 export async function updateSetting(newSetting: SettingParameter): Promise<void> {
-  const db = getFirestore();
   const ref = doc(
     db,
     `settings/${newSetting.setting_id}`
@@ -20,4 +33,24 @@ export async function updateSetting(newSetting: SettingParameter): Promise<void>
   await setDoc(ref, newSetting).then(() => {
     console.log('success');
   });
+}
+
+export async function createUser(user: User): Promise<void> {
+  const ref = doc(
+    db,
+    `users/${user.id}`
+  );
+  await setDoc(ref, user).then(() => {
+    console.log('success');
+  })
+}
+
+export async function updateUserStateOnDB(user: User): Promise<void> {
+  const ref = doc(
+    db,
+    `users/${user.id}`
+  );
+  await setDoc(ref, user, { merge: true }).then(() => {
+    console.log('success');
+  })
 }

@@ -1,4 +1,7 @@
 import { getAuthInfo, getTokenFromByRefreshToken } from '@/api/tokenAuth';
+import { targetValue } from '@/store/setting';
+import { PhaseCompleteActions, targetUserState } from '@/store/users';
+import User from '@/types/user';
 import axios from 'axios';
 
 
@@ -6,35 +9,36 @@ import axios from 'axios';
 // メールアーカイブ依頼　アーカイブID返却
 // ドライブアーカイブ依頼　アーカイブID返却
 
-export async function executeFirstPhase(mailAdress: string, location: string): Promise<string> {
-  // 何処かで一度リフレッシュする
-  // await getTokenFromByRefreshToken();
-  // const baseArchiveId = await createArchiveFolder(mailAdress, location);
-  // if (baseArchiveId === '') {
-  //   return 'error occured';
-  // }
+export async function executeFirstPhase(user: User, getLocationFolderId: (target: string) => string,
+  phaseCompleteActions: PhaseCompleteActions,
+): Promise<string> {
+  const locationId = getLocationFolderId(user.location);
+  const baseArchiveId = await createArchiveFolder(user.mailAddress, locationId);
+  if (baseArchiveId === '') {
+    return 'error occured';
+  }
+  const mailFolderId = await createFolder(baseArchiveId, false);
+  const driveFolderId = await createFolder(baseArchiveId, true);
 
-  // const mailFolderId = await createFolder(baseArchiveId, false);
-  // const driveFolderId = await createFolder(baseArchiveId, true);
+  if (mailFolderId === '' || driveFolderId === '') {
+    return 'error occured';
+  }
 
-  // if (mailFolderId === '' || driveFolderId === '') {
-  //   return 'error occured';
-  // }
 
-  const mailArchiveId = await requestArchive(mailAdress, false);
+  const mailArchiveId = await requestArchive(user.mailAddress, false);
 
-  // const driveArchiveId = await requestArchive(mailAdress, true);
+  const driveArchiveId = await requestArchive(user.mailAddress, true);
 
-  // if (mailArchiveId === '' || driveArchiveId === '') {
-  //   return 'error occured';
-  // }
+  if (mailArchiveId === '' || driveArchiveId === '') {
+    return 'error occured';
+  }
+  await phaseCompleteActions.firstPhase(user.id, mailArchiveId, driveArchiveId, mailFolderId, driveFolderId);
 
-  // firebase update 処理
   return 'success';
 
 }
 
-async function createArchiveFolder(mailAddress: string, location: string): Promise<string> {
+async function createArchiveFolder(mailAddress: string, locationId: string): Promise<string> {
   const token = getAuthInfo()?.access_token;
   if (token === undefined) {
     return "";
@@ -43,13 +47,12 @@ async function createArchiveFolder(mailAddress: string, location: string): Promi
 
 
   const toDay = formattedCurrentDate();
-  const id = getLocationFolderId(location);
 
   const name = `${toDay} ${mailAddress}`;
   const mimeType = "application/vnd.google-apps.folder";
-  const parents = [id];
+  const parents = [locationId];
   const url =
-    "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id";
+    "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fileds=id";
   const metadata = new Blob([JSON.stringify({ mimeType, name, parents })], {
     type: "application/json; charset=UTF-8",
   });
@@ -80,7 +83,7 @@ async function createFolder(baseFolderId: string, isDrive: boolean): Promise<str
   const mimeType = "application/vnd.google-apps.folder";
   const parents = [baseFolderId];
   const url =
-    "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id";
+    "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fileds=id";
   const metadata = new Blob([JSON.stringify({ mimeType, name, parents })], {
     type: "application/json; charset=UTF-8",
   });
@@ -147,11 +150,6 @@ async function requestArchive(mailAddress: string, isDrive: boolean): Promise<st
 }
 
 
-
-
-
-
-
 function formattedCurrentDate() {
   const now = new Date();
   const y = now.getFullYear();
@@ -163,18 +161,4 @@ function formattedCurrentDate() {
   const dd = ("00" + d).slice(-2);
 
   return (yyyy + mm + dd);
-}
-
-function getLocationFolderId(location: string): string {
-  // redux で取得
-  switch (location) {
-    case 'JP':
-      return '1KtB5wX6uorD5L27nFRGj-yCjvggE83nH';
-    case 'SG':
-      return '1KtB5wX6uorD5L27nFRGj-yCjvggE83nH';
-    case 'VN':
-      return '';
-  }
-
-  return "";
 }
