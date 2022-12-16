@@ -11,20 +11,6 @@ export default function Users() {
   const { users } = useUserActions();
   const {processingUsers,addProcessingUsers,removeProcessingUsers} = useProcessingUsersActions();
 
-  // const [isProcessingUsers, setIsProcessingUser] = useState<string[]>([]);
-
-  // const addProcessing = (address: string) => {
-  //   setIsProcessingUser([...isProcessingUsers, address]);
-  // };
-
-  // const removeProcessing = (address: string) => {
-  //   setIsProcessingUser((prev) => {
-  //     const index = prev.findIndex((mail) => mail === address);
-  //     const newUsers = [...prev];
-  //     newUsers.splice(index, 1);
-  //     return newUsers;
-  //   });
-  // };
 
   return (
     <>
