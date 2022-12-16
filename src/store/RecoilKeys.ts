@@ -4,6 +4,7 @@ export enum RecoilAtomKeys {
   SETTING_STATE = 'settingState',
   EDITING_SETTING_STATE = 'editingSettingState',
   RUNNING_OPTION_STATE ='runningOptionState',
+  PROCESSING_USERS_STATE = 'processingUsersState'
 }
 
 // export enum RecoilSelectorKeys{
