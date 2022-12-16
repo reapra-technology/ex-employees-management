@@ -7,6 +7,9 @@ import User from '@/types/user';
 
 export default function RowCard(
   parameter: User,
+  processingUsers: string[],
+  addProcessing: (mail: string) => void,
+  removeProcessing: (mail: string) => void,
 ) {
   const { mailAddress, location } = parameter;
 
@@ -33,7 +36,7 @@ export default function RowCard(
       </div>
       <p className="text-gray-300">|</p>
       <div className="flex w-1/6 items-center justify-around text-center">
-        {ExecuteButton(parameter)}
+        {ExecuteButton(parameter, processingUsers, addProcessing,removeProcessing)}
       </div>
     </div>
   );
