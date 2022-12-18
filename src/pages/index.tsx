@@ -1,12 +1,10 @@
 import TitileRowCard from '@/components/homePage/titileRowCard';
-import User from '../types/user';
 import RowCard from '../components/homePage/rowCard';
 import AddExEmployee from '@/components/homePage/addExEmployee';
 import HorizontalDivider from '@/components/common/horizontalDivider';
 import { useUsersActions } from '@/store/users';
 import { useProcessingUsersActions } from '@/store/processingUsers';
 import { useSettingActions } from '@/store/setting';
-import { useEffect } from 'react';
 
 export default function Users() {
   const { users, changeUserState, deleteUser, phaseCompleteActions } = useUsersActions();

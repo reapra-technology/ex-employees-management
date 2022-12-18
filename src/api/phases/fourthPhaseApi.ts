@@ -1,6 +1,5 @@
 import { getAuthInfo } from '@/api/tokenAuth';
 import { PhaseApiActions, targetUserState } from '@/store/users';
-import { SettingParameter } from '@/types/settingParameter';
 import User from '@/types/user';
 import axios from 'axios';
 

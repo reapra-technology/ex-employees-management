@@ -1,6 +1,6 @@
 import { SettingParameter } from "@/types/settingParameter";
 import { db } from "../../firebase";
-import { collection, deleteDoc, doc, Firestore, getDocs, getFirestore, QuerySnapshot, setDoc, updateDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
 import User from "@/types/user";
 
 export async function fetchSettingFromDB(): Promise<SettingParameter | undefined> {

@@ -1,7 +1,6 @@
 import { AuthInfo, getAuthInfo, getCode, getAuthToken, setAuthInfo } from '@/api/tokenAuth';
-import Unauthorized from '@/pages/login';
 import Router from 'next/router';
-import React, { useState } from 'react';
+import React from 'react';
 
 type AuthorizedContext = Readonly<{
   authInfo?: AuthInfo;

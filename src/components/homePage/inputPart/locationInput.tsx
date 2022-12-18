@@ -1,5 +1,5 @@
 import { MenuItem, Select } from '@mui/material';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement } from 'react';
 
 export function LocationInput(
   value: string,

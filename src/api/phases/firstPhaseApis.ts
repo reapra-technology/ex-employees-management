@@ -1,6 +1,5 @@
-import { getAuthInfo, getTokenFromByRefreshToken } from '@/api/tokenAuth';
-import { targetValue } from '@/store/setting';
-import { PhaseApiActions, targetUserState } from '@/store/users';
+import { getAuthInfo, } from '@/api/tokenAuth';
+import { PhaseApiActions } from '@/store/users';
 import User from '@/types/user';
 import axios from 'axios';
 

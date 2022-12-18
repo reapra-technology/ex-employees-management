@@ -1,7 +1,7 @@
 import DeleteButton from '@/components/homePage/deleteButton';
 import ExecuteButton from '@/components/homePage/executeButton';
 import PhasePanel from '@/components/homePage/phasePanel';
-import { PhaseApiActions, targetUserState } from '@/store/users';
+import { PhaseApiActions } from '@/store/users';
 import { SettingParameter } from '@/types/settingParameter';
 import User from '@/types/user';
 

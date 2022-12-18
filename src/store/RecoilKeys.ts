@@ -6,8 +6,3 @@ export enum RecoilAtomKeys {
   RUNNING_OPTION_STATE ='runningOptionState',
   PROCESSING_USERS_STATE = 'processingUsersState'
 }
-
-// export enum RecoilSelectorKeys{
-//   SETTING_SETTING = 'setting_setting',
-//   EMPLOYEE_EMPLOYEES = 'employee_employees',
-// }

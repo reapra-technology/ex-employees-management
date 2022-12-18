@@ -1,4 +1,4 @@
-import { file, saveFileData } from "@/api/phases/secondPhaseApis";
+import {  saveFileData } from "@/api/phases/secondPhaseApis";
 
 
 type User = {

@@ -6,13 +6,11 @@ import {
   UserOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  SettingOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
-import Image from 'next/image';
 import Link from 'next/link';
-import Router, { useRouter } from 'next/router';
-import React, { ReactNode, useEffect, useState } from 'react';
+import  { useRouter } from 'next/router';
+import React, { useState } from 'react';
 import styles from './adminLayout.module.css';
 
 const { Header, Sider, Content } = Layout;

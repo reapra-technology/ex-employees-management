@@ -1,4 +1,4 @@
-import { getAuthInfo, getTokenFromByRefreshToken } from '@/api/tokenAuth';
+import { getAuthInfo } from '@/api/tokenAuth';
 import { PhaseApiActions } from '@/store/users';
 import User from '@/types/user';
 import axios from 'axios';

@@ -4,8 +4,7 @@ import User from "@/types/user";
 import { atom } from "recoil";
 import UUIDClass from "uuidjs";
 import { archiveUser, createUser, deleteUserOnDb, fetchUsersFromDB, updateUserStateOnDB } from "@/firebase/functions";
-import { async } from "@firebase/util";
-import { file, saveFileData } from "@/api/phases/secondPhaseApis";
+import { saveFileData } from "@/api/phases/secondPhaseApis";
 
 
 export enum targetUserState {
