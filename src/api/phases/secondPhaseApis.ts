@@ -1,10 +1,12 @@
 import { getAuthInfo } from "@/api/tokenAuth";
+import { PhaseApiActions, targetUserState } from "@/store/users";
+import User from "@/types/user";
 import axios from "axios";
 
 const completeText = 'COMPLETED';
 const chankSize = 1024 * 1024 * 500; //500MB
 
-type file = {
+export type file = {
   bucketName: string,
   objectName: string,
   size: string
@@ -23,64 +25,51 @@ type archiveData = {
 // ドライブアーカイブをドライブにダウンロード　ダウンロードID？
 
 
-export default async function executeSecondPhase(mailAddress: string): Promise<string> {
-  const mailArchiveInfo = await getRequestedArchiveInfo();
+export default async function executeSecondPhase(user: User, matterId: string, phaseApiActions: PhaseApiActions): Promise<string> {
+  let files: file[] = [];
+  if ((user.objectFiles?.length ?? 0) > 0) {
+    files = user.objectFiles!;
+  } else {
 
-  // // exportIDを引数で分ける
-  const driveArchiveInfo = await getRequestedArchiveInfo();
-  if (mailAddress === '' || driveArchiveInfo === '') {
-    return 'error occured';
+    const mailArchiveInfo = await getRequestedArchiveInfo(matterId, user.mailExportId ?? '');
+    const driveArchiveInfo = await getRequestedArchiveInfo(matterId, user.driveExportId ?? '');
+    if (driveArchiveInfo === '' || driveArchiveInfo === '') {
+      return 'error occured';
+    }
+    if ((mailArchiveInfo as archiveData).status !== completeText || (driveArchiveInfo as archiveData).status !== completeText) {
+      return 'create archive is processing';
+    }
+
+    (mailArchiveInfo as archiveData).cloudStorageSink.files.forEach((file) => {
+      files.push(file);
+    });
+    (driveArchiveInfo as archiveData).cloudStorageSink.files.forEach((file) => {
+      files.push(file);
+    });
+    await phaseApiActions.addObjectFiles(user.id, files);
+
   }
-  if ((mailArchiveInfo as archiveData).status !== completeText || (driveArchiveInfo as archiveData).status !== completeText) {
-    return 'create archive is processing';
-  }
 
-
-  // const bucketName = "f2c7b131-88c7-4ddd-8fbb-344cba1512e0";
-  // const parentId = '1KtB5wX6uorD5L27nFRGj-yCjvggE83nH';
-
-  // const files: file[] = [
-  //   {
-  //     bucketName: bucketName,
-  //     objectName: 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-a2e65877-2a87-445d-8920-446806a31400/Email-shinnosuke.tominaga@reapra.sg-1.zip',
-  //     size: '21256442'
-  //   },
-  //   {
-  //     bucketName: bucketName,
-  //     objectName: 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c/exportly-a2e65877-2a87-445d-8920-446806a31400/Email-shinnosuke.tominaga@reapra.sg-metadata.csv',
-  //     size: '684382'
-  //   },
-  // ];
-
-  let transferFunctions: Promise<string>[] = [];
-  const driveFolderId = ''; // todo from firebase info
-  const mailFolderId = '';
-
-  (mailArchiveInfo as archiveData).cloudStorageSink.files.forEach((file) => {
-    transferFunctions.push(transferArchiveStorageToDrive(file, mailFolderId));
+  await Promise.allSettled(files.map(async (f) => {
+    await transferArchiveStorageToDrive(f, user.driveDestinationId ?? '').then((_) => {
+      phaseApiActions.removeOjectFile(user.id, f)
+    });
+  })).catch((err) => {
+    return err;
   });
 
-  (driveArchiveInfo as archiveData).cloudStorageSink.files.forEach((file) => {
-    transferFunctions.push(transferArchiveStorageToDrive(file, driveFolderId));
-  });
+  await phaseApiActions.changeUserState(targetUserState.COMPLETE_PHASE, user.id, '2');
 
-  // files.forEach((file) => {
-  //   transferFunctions.push(transferArchiveStorageToDrive(file, parentId));
-  // });
-
-  await Promise.allSettled(transferFunctions);
-
-  return '';
+  return 'success';
 }
 
-async function transferArchiveStorageToDrive(file: file, parentFolderId: string): Promise<string> {
+async function transferArchiveStorageToDrive(file: file, parentFolderId: string): Promise<void> {
   console.log(`start ${file.objectName}`);
 
   const objectName = file.objectName.replaceAll('/', '%2F');
   const bucketName = file.bucketName;
   const uploadUrl = await getUploadUrl(objectName, parentFolderId);
   if (uploadUrl === '') {
-    return 'error occured';
   }
 
   const contentLength = Number(file.size);
@@ -102,25 +91,18 @@ async function transferArchiveStorageToDrive(file: file, parentFolderId: string)
 
       await uploadObject(uploadUrl, objectName, blob as Blob, range, contentLength);
 
-      // firebase更新処理
     });
   }
   console.log(`end ${file.objectName}`);
 
-  return 'success';
-
 }
 
-async function getRequestedArchiveInfo(): Promise<archiveData | string> {
+async function getRequestedArchiveInfo(matterId: string, exportId: string): Promise<archiveData | string> {
   const token = getAuthInfo()?.access_token;
   if (token === undefined) {
     return "";
   }
   let result: archiveData | string = '';
-  // storeから取得
-  const matterId = 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c';
-  // 引数で渡す
-  const exportId = 'exportly-a2e65877-2a87-445d-8920-446806a31400'
   const url =
     `https://vault.googleapis.com/v1/matters/${matterId}/exports/${exportId}`;
 
@@ -158,15 +140,12 @@ async function downloadContents(bucketName: string, objectName: string, range: s
   }).then(async function (res) {
     const type = getContentType(objectName);
     const content = await res.data;
-    console.log(content);
     const blob = new Blob([content], { type: type });
 
-    console.log(blob.size, 'TTTTTTTTT');
     result = blob;
 
   }).catch(function (err) {
-    console.log(err);
-    result = '';
+    result = err;
   });
 
   return result;
@@ -183,14 +162,13 @@ async function getUploadUrl(objectName: string, parentFolderId: string): Promise
   const mimeType = getContentType(objectName);
   const parents = [parentFolderId];
   const url =
-    "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable";
+    "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&supportsAllDrives=true";
 
   const res = await axios.post(url, { name, mimeType, parents }, {
     headers: {
       Authorization: `Bearer ${token}`,
     }
   }).then(function (res) {
-    console.log(res.headers['location']);
     result = res.headers['location'] ?? '';
   }).catch(function (err) {
     result = '';
@@ -205,7 +183,6 @@ async function uploadObject(url: string, objectName: string, object: Blob, range
     return "";
   }
   let result = '';
-  console.log(object.size);
 
   const formData = new FormData();
   const file = object;

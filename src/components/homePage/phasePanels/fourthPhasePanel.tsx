@@ -4,11 +4,11 @@ import User from '../../../types/user';
 
 import CompleteIcon from '../statusIcons/completeIcon';
 
-export default function FourthPhasePanel(param: User): ReactElement {
+export default function FourthPhasePanel(param: User, isProcessing: boolean): ReactElement {
   if ((param.completePhase ?? 0) >= 4) {
     return <CompleteIcon />;
   }
-  if ((param.completePhase ?? 0) + 1 === 4) {
+  if ((param.completePhase ?? 0) === 3 && isProcessing) {
     // ダウンロードの確認
     // if done
     //   firebase appdate

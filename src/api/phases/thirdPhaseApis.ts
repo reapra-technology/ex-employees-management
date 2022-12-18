@@ -1,4 +1,6 @@
 import { getAuthInfo, getTokenFromByRefreshToken } from '@/api/tokenAuth';
+import { PhaseApiActions } from '@/store/users';
+import User from '@/types/user';
 import axios from 'axios';
 
 const DRIVE_NAME = 'Drive and Docs';
@@ -8,41 +10,24 @@ type applicationtype = {
   kind: string,
   id: string,
 }
-
-
-// メールダウンロード状況を確認　要検討　in ダウンロードID？
-// ドライブダウンロード状況を確認　要検討
 // トランスポートAPIを叩く ドライブAPPID 退職者、実行者ID
 // トランスポートID get
 
-export async function executeThirPhase(mailAddress: string) {
+export async function executeThirPhase(user: User, phaseApiActions: PhaseApiActions) {
   const driveId = await getDriveId();
   const executorMail = await getExecutorEmail();
 
   const executorId = await getIdByMailAddress(executorMail);
-  const targetEmployeeId = await getIdByMailAddress(mailAddress);
+  const targetEmployeeId = await getIdByMailAddress(user.mailAddress);
 
   const transferId = await requestTransfer(targetEmployeeId, executorId, driveId);
-  console.log(transferId);
-  await getTransferStatus(transferId);
-
-}
-
-async function getTransferStatus(transferId: string) {
-  const token = getAuthInfo()?.access_token;
-  if (token === undefined) {
-    return "";
+  if (transferId === '') {
+    return 'error occured';
   }
 
-  const url = `https://admin.googleapis.com/admin/datatransfer/v1/transfers/${transferId}`
+  await phaseApiActions.completeThirdPhse(user.id, transferId);
 
-  await axios.get(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }).then((res) => {
-    console.log(res.data);
-  })
+  return 'success';
 }
 
 async function requestTransfer(oldOwnerUserId: string, newOwnerUserId: string, applicationId: string): Promise<string> {
@@ -68,15 +53,13 @@ async function requestTransfer(oldOwnerUserId: string, newOwnerUserId: string, a
     applicationId, applicationTransferParams
   }
 
-
   await axios.post(url, { oldOwnerUserId, newOwnerUserId, applicationDataTransfers }, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }).then(async function (res) {
     console.log(res.data);
-
-    // result = res.data;
+    result = res.data.id;
   }).catch(function (err) {
     result = '';
   });

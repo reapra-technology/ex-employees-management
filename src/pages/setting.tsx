@@ -34,26 +34,44 @@ export default function Setting() {
         isEditingMode,
       )}
       {ContentCard(
-        targetValue.DEST_FOLDER_ID,
-        editingState?.dest_folder_id ?? '',
+        targetValue.MATTER_ID,
+        editingState?.matter_id ?? '',
         showAllContent,
         isEditingMode,
       )}
       {ContentCard(
-        targetValue.JP_FOLDER_ID,
+        targetValue.JP_ARCHIVE_FOLDER_ID,
         editingState?.jp_folder_id ?? '',
         showAllContent,
         isEditingMode,
       )}
       {ContentCard(
-        targetValue.SG_FOLDER_ID,
+        targetValue.SG_ARCHIVE_FOLDER_ID,
         editingState?.sg_folder_id ?? '',
         showAllContent,
         isEditingMode,
       )}
       {ContentCard(
-        targetValue.VN_FOLDER_ID,
+        targetValue.VN_ARCHIVE_FOLDER_ID,
         editingState?.vn_folder_id ?? '',
+        showAllContent,
+        isEditingMode,
+      )}
+      {ContentCard(
+        targetValue.JP_RAW_DATA_FOLDER_ID,
+        editingState?.jp_row_data_folder_id ?? '',
+        showAllContent,
+        isEditingMode,
+      )}
+      {ContentCard(
+        targetValue.SG_RAW_DATA_FOLDER_ID,
+        editingState?.sg_row_data_folder_id ?? '',
+        showAllContent,
+        isEditingMode,
+      )}
+      {ContentCard(
+        targetValue.VN_RAW_DATA_FOLDER_ID,
+        editingState?.vn_row_data_folder_id ?? '',
         showAllContent,
         isEditingMode,
       )}

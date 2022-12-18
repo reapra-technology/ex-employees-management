@@ -1,6 +1,6 @@
 import { getAuthInfo, getTokenFromByRefreshToken } from '@/api/tokenAuth';
 import { targetValue } from '@/store/setting';
-import { PhaseCompleteActions, targetUserState } from '@/store/users';
+import { PhaseApiActions, targetUserState } from '@/store/users';
 import User from '@/types/user';
 import axios from 'axios';
 
@@ -9,8 +9,8 @@ import axios from 'axios';
 // メールアーカイブ依頼　アーカイブID返却
 // ドライブアーカイブ依頼　アーカイブID返却
 
-export async function executeFirstPhase(user: User, getLocationFolderId: (target: string) => string,
-  phaseCompleteActions: PhaseCompleteActions,
+export async function executeFirstPhase(user: User, matterId: string, getLocationFolderId: (target: string) => string,
+  phaseApiActions: PhaseApiActions,
 ): Promise<string> {
   const locationId = getLocationFolderId(user.location);
   const baseArchiveId = await createArchiveFolder(user.mailAddress, locationId);
@@ -25,14 +25,14 @@ export async function executeFirstPhase(user: User, getLocationFolderId: (target
   }
 
 
-  const mailArchiveId = await requestArchive(user.mailAddress, false);
+  const mailArchiveId = await requestArchive(user.mailAddress, matterId, false);
 
-  const driveArchiveId = await requestArchive(user.mailAddress, true);
+  const driveArchiveId = await requestArchive(user.mailAddress, matterId, true);
 
   if (mailArchiveId === '' || driveArchiveId === '') {
     return 'error occured';
   }
-  await phaseCompleteActions.firstPhase(user.id, mailArchiveId, driveArchiveId, mailFolderId, driveFolderId);
+  await phaseApiActions.completeFirstPhase(user.id, mailArchiveId, driveArchiveId, mailFolderId, driveFolderId);
 
   return 'success';
 
@@ -52,7 +52,7 @@ async function createArchiveFolder(mailAddress: string, locationId: string): Pro
   const mimeType = "application/vnd.google-apps.folder";
   const parents = [locationId];
   const url =
-    "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fileds=id";
+    "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true&fileds=id";
   const metadata = new Blob([JSON.stringify({ mimeType, name, parents })], {
     type: "application/json; charset=UTF-8",
   });
@@ -83,7 +83,7 @@ async function createFolder(baseFolderId: string, isDrive: boolean): Promise<str
   const mimeType = "application/vnd.google-apps.folder";
   const parents = [baseFolderId];
   const url =
-    "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fileds=id";
+    "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true&fileds=id";
   const metadata = new Blob([JSON.stringify({ mimeType, name, parents })], {
     type: "application/json; charset=UTF-8",
   });
@@ -100,15 +100,12 @@ async function createFolder(baseFolderId: string, isDrive: boolean): Promise<str
 }
 
 
-async function requestArchive(mailAddress: string, isDrive: boolean): Promise<string> {
+async function requestArchive(mailAddress: string, matterId: string, isDrive: boolean): Promise<string> {
   const token = getAuthInfo()?.access_token;
   if (token === undefined) {
     return "";
   }
   let result = '';
-
-  // storeから取得
-  const matterId = 'de9c4beb-ce77-436c-a5d9-50c7333b1b6c';
 
   const emails = [mailAddress];
   const corpus = isDrive ? 'DRIVE' : 'MAIL';

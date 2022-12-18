@@ -1,3 +1,4 @@
+import { file } from "@/api/phases/secondPhaseApis";
 
 
 type User = {
@@ -10,7 +11,8 @@ type User = {
   transferId?: string;
   mailDestinationId?: string;
   driveDestinationId?: string;
-  objectNames?: string[];
+  objectFiles?: file[];
+  totalObjectFiles?: number
 };
 
 // todo firebaseからの取得処理を書く

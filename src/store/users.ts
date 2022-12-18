@@ -5,6 +5,7 @@ import { atom } from "recoil";
 import UUIDClass from "uuidjs";
 import { createUser, fetchUsersFromDB, updateUserStateOnDB } from "@/firebase/functions";
 import { async } from "@firebase/util";
+import { file } from "@/api/phases/secondPhaseApis";
 
 
 export enum targetUserState {
@@ -14,10 +15,15 @@ export enum targetUserState {
   MAIL_DES_ID = 'MAIL_DEST_ID',
   DRIVE_DES_ID = 'DRIVE_DEST_ID',
   TRANSFER_ID = 'TRANSFER_ID',
+  TOTAL_OBJECT_COUNT = 'TOTAL_OBJECT_COUNT'
 }
 
-export type PhaseCompleteActions = {
-  firstPhase: (id: string, mailExportId: string, driveExportId: string, mailDestId: string, driveDestId: string) => Promise<void>,
+export type PhaseApiActions = {
+  completeFirstPhase: (id: string, mailExportId: string, driveExportId: string, mailDestId: string, driveDestId: string) => Promise<void>,
+  changeUserState: (target: targetUserState, id: string, value: string) => Promise<void>,
+  addObjectFiles: (id: string, files: file[]) => Promise<void>,
+  removeOjectFile: (id: string, file: file) => Promise<void>,
+  completeThirdPhse: (id: string, transferId: string) => Promise<void>,
 }
 
 export const usersState = atom<User[]>({
@@ -63,12 +69,64 @@ export const useUsersActions = () => {
         mailDestinationId: target === targetUserState.MAIL_DES_ID ? value : targetUser.mailDestinationId,
         driveDestinationId: target === targetUserState.DRIVE_DES_ID ? value : targetUser.driveDestinationId,
         transferId: target === targetUserState.TRANSFER_ID ? value : targetUser.transferId,
-        objectNames: targetUser.objectNames,
+        objectFiles: targetUser.objectFiles,
+        totalObjectFiles: target === targetUserState.TOTAL_OBJECT_COUNT ? Number(value) : targetUser.totalObjectFiles,
       };
       newUsers.splice(targetIndex, 1, newUser);
       updateUserStateOnDB(newUser);
       return newUsers;
     });
+  }
+
+  const addObjectFiles = async function (id: string, files: file[]) {
+    setState(function (prev) {
+      const newUsers = [...prev];
+      const targetIndex = newUsers.findIndex((user) => user.id === id);
+      const targetUser = newUsers[targetIndex];
+      const newUser: User = {
+        id: targetUser.id,
+        mailAddress: targetUser.mailAddress,
+        location: targetUser.location,
+        completePhase: targetUser.completePhase,
+        mailExportId: targetUser.mailExportId,
+        driveExportId: targetUser.driveExportId,
+        mailDestinationId: targetUser.mailDestinationId,
+        driveDestinationId: targetUser.driveDestinationId,
+        transferId: targetUser.transferId,
+        objectFiles: files,
+        totalObjectFiles: targetUser.totalObjectFiles,
+      };
+      newUsers.splice(targetIndex, 1, newUser);
+      updateUserStateOnDB(newUser);
+      return newUsers;
+    })
+  }
+
+  const removeObjectFiles = async function (id: string, file: file) {
+    setState(function (prev) {
+      const newUsers = [...prev];
+      const targetIndex = newUsers.findIndex((user) => user.id === id);
+      const targetUser = newUsers[targetIndex];
+      const newFiles = [...targetUser.objectFiles ?? []];
+      const fileIndex = newFiles.findIndex((f) => file.objectName === f.objectName);
+      newFiles.splice(fileIndex, 1);
+      const newUser: User = {
+        id: targetUser.id,
+        mailAddress: targetUser.mailAddress,
+        location: targetUser.location,
+        completePhase: targetUser.completePhase,
+        mailExportId: targetUser.mailExportId,
+        driveExportId: targetUser.driveExportId,
+        mailDestinationId: targetUser.mailDestinationId,
+        driveDestinationId: targetUser.driveDestinationId,
+        transferId: targetUser.transferId,
+        objectFiles: newFiles,
+        totalObjectFiles: targetUser.totalObjectFiles,
+      };
+      newUsers.splice(targetIndex, 1, newUser);
+      updateUserStateOnDB(newUser);
+      return newUsers;
+    })
   }
 
   const completeFirstPhase = async (id: string, mailExportId: string, driveExportId: string, mailDestId: string, driveDestId: string) => {
@@ -86,7 +144,8 @@ export const useUsersActions = () => {
         mailDestinationId: mailDestId,
         driveDestinationId: driveDestId,
         transferId: targetUser.transferId,
-        objectNames: targetUser.objectNames,
+        objectFiles: targetUser.objectFiles,
+        totalObjectFiles: targetUser.totalObjectFiles
       };
       newUsers.splice(targetIndex, 1, newUser);
       updateUserStateOnDB(newUser);
@@ -94,12 +153,40 @@ export const useUsersActions = () => {
     });
   };
 
-  const phaseCompleteActions: PhaseCompleteActions = {
-    firstPhase: completeFirstPhase
+  const completeThirdPhase = async (id: string, transferId: string) => {
+    setState(function (prev) {
+      const newUsers = [...prev];
+      const targetIndex = newUsers.findIndex((user) => user.id === id);
+      const targetUser = newUsers[targetIndex];
+      const newUser: User = {
+        id: targetUser.id,
+        mailAddress: targetUser.mailAddress,
+        location: targetUser.location,
+        completePhase: 3,
+        mailExportId: targetUser.mailExportId,
+        driveExportId: targetUser.driveExportId,
+        mailDestinationId: targetUser.mailDestinationId,
+        driveDestinationId: targetUser.driveDestinationId,
+        transferId: transferId,
+        objectFiles: targetUser.objectFiles,
+        totalObjectFiles: targetUser.totalObjectFiles
+      };
+      newUsers.splice(targetIndex, 1, newUser);
+      updateUserStateOnDB(newUser);
+      return newUsers;
+    });
+  };
+
+  const phaseCompleteActions: PhaseApiActions = {
+    completeFirstPhase: completeFirstPhase,
+    changeUserState: changeUserState,
+    addObjectFiles: addObjectFiles,
+    removeOjectFile: removeObjectFiles,
+    completeThirdPhse: completeThirdPhase,
   };
 
   // objectname 処理
 
-  return { users: state, fetchUsers: fetchUsers, addUser: addUser, changeUserState: changeUserState,phaseCompleteActions:phaseCompleteActions };
+  return { users: state, fetchUsers: fetchUsers, addUser: addUser, changeUserState: changeUserState, phaseCompleteActions: phaseCompleteActions };
 
 }

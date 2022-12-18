@@ -9,11 +9,14 @@ import { useSettingActions } from '@/store/setting';
 import { useEffect } from 'react';
 
 export default function Users() {
-  const { users,  changeUserState, phaseCompleteActions } = useUsersActions();
+  const { users, changeUserState, phaseCompleteActions } = useUsersActions();
   const { processingUsers, addProcessingUsers, removeProcessingUsers } =
     useProcessingUsersActions();
-  const { getLocationFolderId } = useSettingActions();
-
+  const {
+    getLocationArchiveFolderId: getLocationFolderId,
+    getLocationRowDataFolderId,
+    currentSetting,
+  } = useSettingActions();
 
   return (
     <>
@@ -26,10 +29,12 @@ export default function Users() {
             <li>
               {RowCard(
                 user,
+                currentSetting,
                 processingUsers,
                 addProcessingUsers,
                 removeProcessingUsers,
                 getLocationFolderId,
+                getLocationRowDataFolderId,
                 phaseCompleteActions,
               )}
             </li>
