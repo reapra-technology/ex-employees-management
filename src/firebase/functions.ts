@@ -1,6 +1,6 @@
 import { SettingParameter } from "@/types/settingParameter";
 import { db } from "../../firebase";
-import { collection, doc, Firestore, getDocs, getFirestore, QuerySnapshot, setDoc, updateDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, Firestore, getDocs, getFirestore, QuerySnapshot, setDoc, updateDoc } from "firebase/firestore";
 import User from "@/types/user";
 
 export async function fetchSettingFromDB(): Promise<SettingParameter | undefined> {
@@ -53,4 +53,20 @@ export async function updateUserStateOnDB(user: User): Promise<void> {
   await setDoc(ref, user, { merge: true }).then(() => {
     console.log('success');
   })
+}
+
+export async function deleteUserOnDb(id: string): Promise<void> {
+  const ref = doc(
+    db,
+    `users/${id}`
+  );
+  await deleteDoc(ref);
+}
+
+export async function archiveUser(user: User): Promise<void> {
+  const ref = doc(
+    db,
+    `archivedUser/${user.id}`
+  );
+  await setDoc(ref, user);
 }

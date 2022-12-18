@@ -1,8 +1,8 @@
-import { getAuthInfo, requestCodeFlow } from '@/api/tokenAuth';
+import { requestCodeFlow } from '@/api/tokenAuth';
 import { AuthorizedContext } from '@/components/contexts/tokenAuthContext';
-import Router from 'next/router';
+import { Button } from 'antd';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 
 export default function Unauthorized(): React.ReactElement {
   const { authInfo } = React.useContext(AuthorizedContext);
@@ -12,10 +12,8 @@ export default function Unauthorized(): React.ReactElement {
   }
 
   return (
-    <div>
-      <div>ログインしていません。</div>
-      <button onClick={() => requestCodeFlow()}>ログイン</button>
-      <button onClick={() => console.log('pppprpprp')}>ログイン</button>
+    <div className="flex h-full w-full items-center justify-center">
+      <Button onClick={() => requestCodeFlow()}>ログイン</Button>
     </div>
   );
 }

@@ -14,7 +14,7 @@ export default function TitileRowCard() {
         break;
       case 2:
         content =
-          '・メールアーカイブをGoogle Driveにダウンロード\n・ドライブアーカイブをGoogle Driveにダウンロード\n・トランスポートAPIの実行(退職者→実行者)';
+          '・メールアーカイブをGoogle Driveにダウンロード\n・ドライブアーカイブをGoogle Driveにダウンロード';
         break;
       case 3:
         content = '・トランスポートAPIの実行(退職者→実行者)';

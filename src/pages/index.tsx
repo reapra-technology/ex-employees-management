@@ -9,7 +9,7 @@ import { useSettingActions } from '@/store/setting';
 import { useEffect } from 'react';
 
 export default function Users() {
-  const { users, changeUserState, phaseCompleteActions } = useUsersActions();
+  const { users, changeUserState, deleteUser, phaseCompleteActions } = useUsersActions();
   const { processingUsers, addProcessingUsers, removeProcessingUsers } =
     useProcessingUsersActions();
   const {
@@ -31,6 +31,7 @@ export default function Users() {
                 user,
                 currentSetting,
                 processingUsers,
+                deleteUser,
                 addProcessingUsers,
                 removeProcessingUsers,
                 getLocationFolderId,

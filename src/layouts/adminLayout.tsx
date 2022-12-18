@@ -1,5 +1,5 @@
 // layouts/adminLayout.tsx
-import { getTokenFromByRefreshToken } from '@/api/tokenAuth';
+import { getAuthInfo, getTokenFromByRefreshToken } from '@/api/tokenAuth';
 import { AuthorizedContext } from '@/components/contexts/tokenAuthContext';
 import LoginLayout from '@/layouts/loginLayout';
 import { useRunningOptionActions } from '@/store/runningOption';
@@ -43,10 +43,11 @@ export default function AdminLayout({ children }: { readonly children: ReactNode
         setOption(option);
       }
     }
-    getTokenFromByRefreshToken().then(() => {
-      fetchSetting();
-      fetchUsers();
-    });
+    if (getAuthInfo()?.access_token)
+      getTokenFromByRefreshToken().then(() => {
+        fetchSetting();
+        fetchUsers();
+      });
   }, []);
 
   if (authInfo === undefined) {

@@ -3,7 +3,7 @@ import { RecoilAtomKeys } from "@/store/RecoilKeys";
 import User from "@/types/user";
 import { atom } from "recoil";
 import UUIDClass from "uuidjs";
-import { createUser, fetchUsersFromDB, updateUserStateOnDB } from "@/firebase/functions";
+import { archiveUser, createUser, deleteUserOnDb, fetchUsersFromDB, updateUserStateOnDB } from "@/firebase/functions";
 import { async } from "@firebase/util";
 import { file, saveFileData } from "@/api/phases/secondPhaseApis";
 
@@ -52,6 +52,20 @@ export const useUsersActions = () => {
       return [...prev, user]
     });
     await createUser(user);
+  }
+
+  const deleteUser = async (id: string) => {
+    setState(function (prev) {
+      const newUsers = [...prev];
+      const targetIndex = newUsers.findIndex((user) => user.id === id);
+      const targetUser = newUsers[targetIndex];
+      newUsers.splice(targetIndex, 1);
+
+      deleteUserOnDb(id);
+      archiveUser(targetUser);
+
+      return newUsers;
+    })
   }
 
   const changeUserState = async function (target: targetUserState, id: string, value: string) {
@@ -187,6 +201,9 @@ export const useUsersActions = () => {
 
   // objectname 処理
 
-  return { users: state, fetchUsers: fetchUsers, addUser: addUser, changeUserState: changeUserState, phaseCompleteActions: phaseCompleteActions };
+  return {
+    users: state, fetchUsers: fetchUsers, addUser: addUser, changeUserState: changeUserState,
+    phaseCompleteActions: phaseCompleteActions, deleteUser: deleteUser
+  };
 
 }
