@@ -5,7 +5,7 @@ import { atom } from "recoil";
 import UUIDClass from "uuidjs";
 import { createUser, fetchUsersFromDB, updateUserStateOnDB } from "@/firebase/functions";
 import { async } from "@firebase/util";
-import { file } from "@/api/phases/secondPhaseApis";
+import { file, saveFileData } from "@/api/phases/secondPhaseApis";
 
 
 export enum targetUserState {
@@ -21,8 +21,8 @@ export enum targetUserState {
 export type PhaseApiActions = {
   completeFirstPhase: (id: string, mailExportId: string, driveExportId: string, mailDestId: string, driveDestId: string) => Promise<void>,
   changeUserState: (target: targetUserState, id: string, value: string) => Promise<void>,
-  addObjectFiles: (id: string, files: file[]) => Promise<void>,
-  removeOjectFile: (id: string, file: file) => Promise<void>,
+  addObjectFiles: (id: string, files: saveFileData[]) => Promise<void>,
+  removeOjectFile: (id: string, file: saveFileData) => Promise<void>,
   completeThirdPhse: (id: string, transferId: string) => Promise<void>,
 }
 
@@ -78,7 +78,7 @@ export const useUsersActions = () => {
     });
   }
 
-  const addObjectFiles = async function (id: string, files: file[]) {
+  const addObjectFiles = async function (id: string, files: saveFileData[]) {
     setState(function (prev) {
       const newUsers = [...prev];
       const targetIndex = newUsers.findIndex((user) => user.id === id);
@@ -102,13 +102,13 @@ export const useUsersActions = () => {
     })
   }
 
-  const removeObjectFiles = async function (id: string, file: file) {
+  const removeObjectFiles = async function (id: string, file: saveFileData) {
     setState(function (prev) {
       const newUsers = [...prev];
       const targetIndex = newUsers.findIndex((user) => user.id === id);
       const targetUser = newUsers[targetIndex];
       const newFiles = [...targetUser.objectFiles ?? []];
-      const fileIndex = newFiles.findIndex((f) => file.objectName === f.objectName);
+      const fileIndex = newFiles.findIndex((f) => file.file.objectName === f.file.objectName);
       newFiles.splice(fileIndex, 1);
       const newUser: User = {
         id: targetUser.id,

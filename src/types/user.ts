@@ -1,4 +1,4 @@
-import { file } from "@/api/phases/secondPhaseApis";
+import { file, saveFileData } from "@/api/phases/secondPhaseApis";
 
 
 type User = {
@@ -11,7 +11,7 @@ type User = {
   transferId?: string;
   mailDestinationId?: string;
   driveDestinationId?: string;
-  objectFiles?: file[];
+  objectFiles?: saveFileData[];
   totalObjectFiles?: number
 };
 

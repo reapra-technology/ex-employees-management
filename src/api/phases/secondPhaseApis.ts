@@ -18,6 +18,11 @@ type archiveData = {
     files: file[]
   },
 }
+
+export type saveFileData = {
+  file: file,
+  isDrive: boolean,
+}
 // メールアーカイブ状況確認　in ID
 // ドライブアーカイブ状況確認　in ID
 // then
@@ -26,34 +31,38 @@ type archiveData = {
 
 
 export default async function executeSecondPhase(user: User, matterId: string, phaseApiActions: PhaseApiActions): Promise<string> {
-  let files: file[] = [];
+  let files: saveFileData[] = [];
   if ((user.objectFiles?.length ?? 0) > 0) {
     files = user.objectFiles!;
   } else {
-
     const mailArchiveInfo = await getRequestedArchiveInfo(matterId, user.mailExportId ?? '');
     const driveArchiveInfo = await getRequestedArchiveInfo(matterId, user.driveExportId ?? '');
     if (driveArchiveInfo === '' || driveArchiveInfo === '') {
       return 'error occured';
     }
     if ((mailArchiveInfo as archiveData).status !== completeText || (driveArchiveInfo as archiveData).status !== completeText) {
-      return 'create archive is processing';
+      return 'Archiving in progress';
     }
 
     (mailArchiveInfo as archiveData).cloudStorageSink.files.forEach((file) => {
-      files.push(file);
+      files.push({ file: file, isDrive: false });
     });
     (driveArchiveInfo as archiveData).cloudStorageSink.files.forEach((file) => {
-      files.push(file);
+      files.push({ file: file, isDrive: true });
     });
     await phaseApiActions.addObjectFiles(user.id, files);
-
   }
 
   await Promise.allSettled(files.map(async (f) => {
-    await transferArchiveStorageToDrive(f, user.driveDestinationId ?? '').then((_) => {
-      phaseApiActions.removeOjectFile(user.id, f)
-    });
+    if (f.isDrive) {
+      await transferArchiveStorageToDrive(f.file, user.driveDestinationId ?? '').then((_) => {
+        phaseApiActions.removeOjectFile(user.id, f)
+      });
+    } else {
+      await transferArchiveStorageToDrive(f.file, user.mailDestinationId ?? '').then((_) => {
+        phaseApiActions.removeOjectFile(user.id, f)
+      });
+    }
   })).catch((err) => {
     return err;
   });

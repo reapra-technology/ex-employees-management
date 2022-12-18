@@ -18,7 +18,7 @@ type driveFile = {
 export async function executeFourthPhase(user: User, phaseApiActions: PhaseApiActions, getLocationFolderId: (target: string) => string,): Promise<string> {
   const status = await getTransferStatus(user.transferId ?? '');
   if (status !== 'completed') {
-    return 'transfer api is running';
+    return 'Data migration in progress';
   }
   const mainFolder = await getTargetUserFolderId(user.mailAddress);
   if (mainFolder === '') {
