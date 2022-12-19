@@ -4,9 +4,10 @@ import User from '@/types/user';
 import axios from 'axios';
 
 
-// アーカイブ保存先フォルダ作成　ドライブ　メール　保存先ID返却
-// メールアーカイブ依頼　アーカイブID返却
-// ドライブアーカイブ依頼　アーカイブID返却
+// アーカイブ保存先フォルダ作成　フォルダID取得
+// メールアーカイブ依頼　アーカイブID取得
+// ドライブアーカイブ依頼　アーカイブID取得
+// メールフォルダ-ID＆ドライブフォルダーID＆メールアーカイブID＆ドライブアーカイブID->DB保存
 
 export async function executeFirstPhase(user: User, matterId: string, getLocationFolderId: (target: string) => string,
   phaseApiActions: PhaseApiActions,

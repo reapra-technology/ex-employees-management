@@ -10,8 +10,8 @@ type applicationtype = {
   kind: string,
   id: string,
 }
-// トランスポートAPIを叩く ドライブAPPID 退職者、実行者ID
-// トランスポートID get
+// transfer APIを叩く transfer IDを取得
+// transferId -> DB保存
 
 export async function executeThirPhase(user: User, phaseApiActions: PhaseApiActions) {
   const driveId = await getDriveId();

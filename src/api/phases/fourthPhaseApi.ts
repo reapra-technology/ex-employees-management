@@ -3,7 +3,7 @@ import { PhaseApiActions, targetUserState } from '@/store/users';
 import User from '@/types/user';
 import axios from 'axios';
 
-// トランスポート状況の確認
+// transfer api 状況確認
 // then
 // 実行者から目的のフォルダへ
 

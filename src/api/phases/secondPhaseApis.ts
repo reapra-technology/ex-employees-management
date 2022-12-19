@@ -23,11 +23,11 @@ export type saveFileData = {
   file: file,
   isDrive: boolean,
 }
-// メールアーカイブ状況確認　in ID
-// ドライブアーカイブ状況確認　in ID
+// メールアーカイブ状況確認　
+// ドライブアーカイブ状況確認　i
 // then
-// メールアーカイブをドライブにダウンロード ダウンロードID？
-// ドライブアーカイブをドライブにダウンロード　ダウンロードID？
+// メールアーカイブをドライブにダウンロード
+// ドライブアーカイブをドライブにダウンロード
 
 
 export default async function executeSecondPhase(user: User, matterId: string, phaseApiActions: PhaseApiActions): Promise<string> {
