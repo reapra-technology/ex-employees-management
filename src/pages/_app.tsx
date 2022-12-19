@@ -17,6 +17,8 @@ const AdminLayout = dynamic(() => import('../layouts/adminLayout'), {
 });
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+  console.log(process.env.NEXT_PUBLIC_TEST);
+
   const queryClient = new QueryClient();
   return (
     <RecoilRoot>
