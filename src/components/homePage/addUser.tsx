@@ -5,7 +5,7 @@ import { useSnackbar } from '@/utils/snackbar/snackbar';
 import { Button } from 'antd';
 import { useState } from 'react';
 
-export default function AddExEmployee() {
+export default function AddUser() {
   const [mailAddress, setMailAddress] = useState<string>('');
   const [location, setLocation] = useState<string>('');
 

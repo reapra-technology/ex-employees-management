@@ -18,9 +18,9 @@ export async function executeThirPhase(user: User, phaseApiActions: PhaseApiActi
   const executorMail = await getExecutorEmail();
 
   const executorId = await getIdByMailAddress(executorMail);
-  const targetEmployeeId = await getIdByMailAddress(user.mailAddress);
+  const targetUserId = await getIdByMailAddress(user.mailAddress);
 
-  const transferId = await requestTransfer(targetEmployeeId, executorId, driveId);
+  const transferId = await requestTransfer(targetUserId, executorId, driveId);
   if (transferId === '') {
     return 'error occured';
   }

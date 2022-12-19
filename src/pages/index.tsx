@@ -1,6 +1,6 @@
 import TitileRowCard from '@/components/homePage/titileRowCard';
 import RowCard from '../components/homePage/rowCard';
-import AddExEmployee from '@/components/homePage/addExEmployee';
+import AddUser from '@/components/homePage/addUser';
 import HorizontalDivider from '@/components/common/horizontalDivider';
 import { useUsersActions } from '@/store/users';
 import { useProcessingUsersActions } from '@/store/processingUsers';
@@ -18,7 +18,7 @@ export default function Users() {
 
   return (
     <>
-      <AddExEmployee />
+      <AddUser />
       {HorizontalDivider()}
       <TitileRowCard />
       <ul className="h-2/3 overflow-scroll">

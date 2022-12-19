@@ -1,6 +1,6 @@
 export type RunningOption = {
-  rungNextEmployee: boolean,
+  rungNextUser: boolean,
   runNextPhase: boolean,
-  removeFinishedEmployee: boolean,
-  concurrentNumber:number,
+  removeFinishedUser: boolean,
+  concurrentNumber: number,
 }

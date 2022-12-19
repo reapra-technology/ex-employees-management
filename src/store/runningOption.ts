@@ -7,14 +7,14 @@ import { atom } from "recoil";
 
 export const runningOptionState = atom<RunningOption>({
   key: RecoilAtomKeys.RUNNING_OPTION_STATE,
-  default: { removeFinishedEmployee: false, rungNextEmployee: false, runNextPhase: false, concurrentNumber: 1, }
+  default: { removeFinishedUser: false, rungNextUser: false, runNextPhase: false, concurrentNumber: 1, }
 });
 
 
 export enum targetOption {
   RUN_NEXT_PHASE = 'RUN_NEXT_PHASE',
-  RUN_NEXT_EPMLOYEE = 'RUN_NEXT_EPMLOYEE',
-  REMOVE_FINISHED_EMPLOYEE = 'REMOVE_FINISHED_EMPLOYEE',
+  RUN_NEXT_EPMLOYEE = 'RUN_NEXT_USER',
+  REMOVE_FINISHED_USER = 'REMOVE_FINISHED_USER',
 }
 
 export const useRunningOptionActions = () => {
@@ -22,9 +22,9 @@ export const useRunningOptionActions = () => {
 
   const changeOption = (value: boolean, target: string) => {
     const newOption: RunningOption = {
-      rungNextEmployee: target === targetOption.RUN_NEXT_EPMLOYEE ? value : state.rungNextEmployee,
+      rungNextUser: target === targetOption.RUN_NEXT_EPMLOYEE ? value : state.rungNextUser,
       runNextPhase: target === targetOption.RUN_NEXT_PHASE ? value : state.runNextPhase,
-      removeFinishedEmployee: target === targetOption.REMOVE_FINISHED_EMPLOYEE ? value : state.removeFinishedEmployee,
+      removeFinishedUser: target === targetOption.REMOVE_FINISHED_USER ? value : state.removeFinishedUser,
       concurrentNumber: state.concurrentNumber,
     }
     setState(newOption);
@@ -37,9 +37,9 @@ export const useRunningOptionActions = () => {
       return;
     }
     const newOption: RunningOption = {
-      rungNextEmployee: state.rungNextEmployee,
+      rungNextUser: state.rungNextUser,
       runNextPhase: state.runNextPhase,
-      removeFinishedEmployee: state.removeFinishedEmployee,
+      removeFinishedUser: state.removeFinishedUser,
       concurrentNumber: value,
     }
     setState(newOption);
