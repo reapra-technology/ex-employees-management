@@ -2,13 +2,13 @@ import axios from "axios";
 
 export const authParams = {
   // todo env
-  clientId: "822513270208-9grjmgbnhs4hhdcr9lae7fm68tv5n5st.apps.googleusercontent.com",
-  clientSecret: "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",
-  scope: 'https://www.googleapis.com/auth/ediscovery https://www.googleapis.com/auth/devstorage.read_only https://www.googleapis.com/auth/devstorage.full_control https://www.googleapis.com/auth/devstorage.read_write https://www.googleapis.com/auth/cloud-platform.read-only https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/admin.datatransfer https://www.googleapis.com/auth/admin.directory.user.readonly https://www.googleapis.com/auth/admin.datatransfer.readonly https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/userinfo.email',
+  clientId: process.env.NEXT_PUBLIC_CLIENT_ID!,
+  clientSecret: process.env.NEXT_PUBLIC_CLIENT_SECRET!,
+  scope: process.env.NEXT_PUBLIC_TOKEN_SCOPE!,
   responseType: "code",
   approvalPrompt: "force",
   accessType: "offline",
-  redirectUri: "http://localhost:8080/auth-code",
+  redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URI!,
   grantType: "authorization_code",
 } as const;
 
@@ -22,13 +22,13 @@ export type AuthInfo = Readonly<{
 }>;
 
 export function setAuthInfo(a: AuthInfo): void {
-  window.localStorage.setItem("authInfoKey", JSON.stringify(a));
+  window.localStorage.setItem(process.env.NEXT_PUBLIC_LOCAL_STORAGE_TOKEN_KEY!, JSON.stringify(a));
 }
 
 export function getAuthInfo(): AuthInfo | null {
   if (process.browser) {
 
-    const item = window.localStorage.getItem("authInfoKey");
+    const item = window.localStorage.getItem(process.env.NEXT_PUBLIC_LOCAL_STORAGE_TOKEN_KEY!);
     if (item !== null) {
       return JSON.parse(item) as AuthInfo;
     } else {
@@ -39,7 +39,7 @@ export function getAuthInfo(): AuthInfo | null {
 }
 
 export function deleteAuthInfo(): void {
-  window.localStorage.removeItem("authInfoKey");
+  window.localStorage.removeItem(process.env.NEXT_PUBLIC_LOCAL_STORAGE_TOKEN_KEY!);
 }
 
 export function requestCodeFlow(): void {
