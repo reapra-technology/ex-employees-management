@@ -15,6 +15,4 @@ type User = {
   totalObjectFiles?: number
 };
 
-// todo firebaseからの取得処理を書く
-
 export default User;

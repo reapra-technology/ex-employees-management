@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const authParams = {
-  // todo env
   clientId: process.env.NEXT_PUBLIC_CLIENT_ID!,
   clientSecret: process.env.NEXT_PUBLIC_CLIENT_SECRET!,
   scope: process.env.NEXT_PUBLIC_TOKEN_SCOPE!,
