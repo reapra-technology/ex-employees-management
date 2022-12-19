@@ -2,8 +2,8 @@ import initializeBasicAuth from 'nextjs-basic-auth'
 import type { IncomingMessage, ServerResponse } from 'http'
 
 const users = [
-  { user: 'user', password: 'password' },
-  { user: 'admin', password: 'admin' },
+  { user: process.env.NEXT_PUBLIC_BASIC_AUTH_USER_NAME!, password: process.env.NEXT_PUBLIC_BASIC_AUTH_PASSWORD! },
+  { user: 'admin', password: 'admin' },// デプロイ時に削除
 ]
 
 const basicAuthCheck = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
