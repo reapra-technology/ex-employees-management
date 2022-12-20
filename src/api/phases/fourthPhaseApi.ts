@@ -20,10 +20,15 @@ export async function executeFourthPhase(user: User, phaseApiActions: PhaseApiAc
     return 'Data migration in progress';
   }
   const mainFolder = await getTargetUserFolderId(user.mailAddress);
+  if (mainFolder === undefined && user.transferId) {
+    await phaseApiActions.changeUserState(targetUserState.COMPLETE_PHASE, user.id, '4');
+    return 'raw data has already been moved';
+  }
   if (mainFolder === '') {
     return '';
   }
   const rawDataFolderId = getLocationFolderId(user.location);
+
   await moveFolderData((mainFolder as driveFile).id, rawDataFolderId, user.mailAddress);
 
   await deleteEmptyFolder((mainFolder as driveFile).id);

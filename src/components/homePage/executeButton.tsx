@@ -23,7 +23,7 @@ export default function ExecuteButton(
   const { showSnackbar } = useSnackbar();
   const execute = async () => {
     const sleep = (second: number) => new Promise((resolve) => setTimeout(resolve, second * 1000));
-    // // 定期トークンリフレッシュ(30分に一回)
+    // 実行中の不具合を減らすてために定期的にトークンをリフレッシュ(30分に一回)
     getTokenFromByRefreshToken();
     const intervalId = setInterval(() => getTokenFromByRefreshToken(), 30 * 60 * 1000);
     addProcessing(user.mailAddress);
@@ -31,7 +31,7 @@ export default function ExecuteButton(
     await exucuteProcees();
 
     removeProcessing(user.mailAddress);
-    setTimeout(() => clearInterval(intervalId), 3000);
+    clearInterval(intervalId);
   };
 
   const exucuteProcees = async () => {
@@ -43,7 +43,7 @@ export default function ExecuteButton(
         phaseApiActions,
       ).then((result: string) => {
         if (result !== 'success') {
-          showSnackbar(result, 'error', 5000);
+          showSnackbar(result, 'error', 50000);
         }
       });
     }
@@ -51,7 +51,7 @@ export default function ExecuteButton(
       await executeSecondPhase(user, setting?.matter_id ?? '', phaseApiActions).then(
         (result: string) => {
           if (result !== 'success') {
-            showSnackbar(result, 'error', 5000);
+            showSnackbar(result, 'error', 50000);
           }
         },
       );
@@ -59,14 +59,14 @@ export default function ExecuteButton(
     if (user.completePhase! === 2) {
       await executeThirPhase(user, phaseApiActions).then((result: string) => {
         if (result !== 'success') {
-          showSnackbar(result, 'error', 5000);
+          showSnackbar(result, 'error', 50000);
         }
       });
     }
     if (user.completePhase! === 3) {
       await executeFourthPhase(user, phaseApiActions, getRawFolderId).then((result: string) => {
         if (result !== 'success') {
-          showSnackbar(result, 'error', 5000);
+          showSnackbar(result, 'error', 50000);
         }
       });
     }

@@ -12,7 +12,7 @@ export default function PhasePanel(
     return <CompleteIcon />;
   }
 
-  if ((param.completePhase ?? 1) === phase && isProcessing) {
+  if ((param.completePhase ?? 0) + 1 === phase && isProcessing) {
     return <ProcessingIcon />;
   }
 
