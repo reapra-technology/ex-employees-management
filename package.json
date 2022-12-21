@@ -9,7 +9,8 @@
     "lint": "next lint --dir src",
     "lint:fix": "next lint --dir src --fix",
     "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json}'",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "export":"next export"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.5",
