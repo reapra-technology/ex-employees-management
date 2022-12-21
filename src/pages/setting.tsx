@@ -4,7 +4,6 @@ import HorizontalDivider from '@/components/common/horizontalDivider';
 import ShowAllButton from '@/components/settingPage/showAllButton';
 import { targetValue, useSettingActions } from '@/store/setting';
 import EditButton from '@/components/settingPage/editButton';
-import RunOptions from '@/components/settingPage/runOptions/runOptions';
 
 export default function Setting() {
   const { editingState } = useSettingActions();
@@ -13,7 +12,6 @@ export default function Setting() {
 
   return (
     <div className="h-full overflow-scroll">
-      {RunOptions()}
       {HorizontalDivider()}
       <div className="m-4 flex">
         {ShowAllButton(showAllContent, setShowAllContent)}
