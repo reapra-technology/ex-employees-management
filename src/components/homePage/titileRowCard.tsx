@@ -1,4 +1,3 @@
-import AllExecuteButton from '@/components/homePage/allExecuteButton';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { useSnackbar } from '../../utils/snackbar/snackbar';
 
@@ -50,7 +49,7 @@ export default function TitileRowCard() {
         );
       })}
       <p className="text-gray-300">|</p>
-      <div className="flex w-1/6 items-center justify-around text-center">{AllExecuteButton()}</div>
+      <div className="m-0.5 flex w-1/6 items-center justify-around text-center"></div>
     </div>
   );
 }
