@@ -1,0 +1,35 @@
+[debug] [2022-12-21T10:22:44.409Z] ----------------------------------------------------------------------
+[debug] [2022-12-21T10:22:44.411Z] Command:       /usr/local/bin/node /Users/shinnosuke.tominaga/dev/next/ex-employees-management/node_modules/.bin/firebase deploy
+[debug] [2022-12-21T10:22:44.411Z] CLI Version:   11.19.0
+[debug] [2022-12-21T10:22:44.411Z] Platform:      darwin
+[debug] [2022-12-21T10:22:44.411Z] Node Version:  v16.14.2
+[debug] [2022-12-21T10:22:44.412Z] Time:          Wed Dec 21 2022 19:22:44 GMT+0900 (日本標準時)
+[debug] [2022-12-21T10:22:44.413Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-12-21T10:22:44.463Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-12-21T10:22:44.464Z] > authorizing via signed-in user (shinnosuke.tominaga@reapra.sg)
+[debug] [2022-12-21T10:22:44.464Z] [iam] checking project ex-employees-management for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-12-21T10:22:44.465Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/ex-employees-management:testIamPermissions [none]
+[debug] [2022-12-21T10:22:44.466Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/ex-employees-management:testIamPermissions x-goog-quota-user=projects/ex-employees-management
+[debug] [2022-12-21T10:22:44.466Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/ex-employees-management:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-12-21T10:22:45.347Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/ex-employees-management:testIamPermissions 200
+[debug] [2022-12-21T10:22:45.347Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/ex-employees-management:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-12-21T10:22:45.349Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/ex-employees-management [none]
+[debug] [2022-12-21T10:22:45.751Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/ex-employees-management 200
+[debug] [2022-12-21T10:22:45.752Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/ex-employees-management {"projectId":"ex-employees-management","projectNumber":"877826282480","displayName":"ex-employees-management","name":"projects/ex-employees-management","resources":{"hostingSite":"ex-employees-management"},"state":"ACTIVE","etag":"1_ed965602-cfb0-4432-8644-a7ba9dae5e77"}
+[debug] [2022-12-21T10:22:47.865Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/ex-employees-management/sites pageToken=&pageSize=10
+[debug] [2022-12-21T10:22:48.980Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/ex-employees-management/sites 200
+[debug] [2022-12-21T10:22:48.980Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/ex-employees-management/sites {"sites":[{"name":"projects/ex-employees-management/sites/ex-employees-management","defaultUrl":"https://ex-employees-management.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2022-12-21T10:22:48.982Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/ex-employees-management/sites 
+[debug] [2022-12-21T10:22:49.839Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/ex-employees-management/sites 200
+[debug] [2022-12-21T10:22:49.839Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/ex-employees-management/sites {"sites":[{"name":"projects/ex-employees-management/sites/ex-employees-management","defaultUrl":"https://ex-employees-management.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2022-12-21T10:22:49.840Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/ex-employees-management/webApps/-/config [none]
+[debug] [2022-12-21T10:22:51.073Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/ex-employees-management/webApps/-/config 200
+[debug] [2022-12-21T10:22:51.073Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/ex-employees-management/webApps/-/config {"projectId":"ex-employees-management","appId":"1:877826282480:web:883d565b7bfda938890335","storageBucket":"ex-employees-management.appspot.com","apiKey":"AIzaSyDp3WfaQMqEYGHmszyuitgaoLQTEcrjt9M","authDomain":"ex-employees-management.firebaseapp.com","messagingSenderId":"877826282480"}
+[debug] [2022-12-21T10:24:14.985Z] Error: Command failed: npm i --omit dev --no-audit
+    at checkExecSyncError (node:child_process:828:11)
+    at execSync (node:child_process:902:15)
+    at prepareFrameworks (/Users/shinnosuke.tominaga/dev/next/ex-employees-management/node_modules/firebase-tools/lib/frameworks/index.js:335:42)
+    at async deploy (/Users/shinnosuke.tominaga/dev/next/ex-employees-management/node_modules/firebase-tools/lib/deploy/index.js:53:13)
+[error] 
+[error] Error: An unexpected error has occurred.
