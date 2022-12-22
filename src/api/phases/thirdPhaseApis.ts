@@ -74,7 +74,7 @@ async function requestTransfer(
   return result;
 }
 
-async function getExecutorEmail(): Promise<string> {
+export async function getExecutorEmail(): Promise<string> {
   const token = getAuthInfo()?.access_token;
   if (token === undefined) {
     return '';
