@@ -37,7 +37,6 @@ export default function AdminLayout({ children }: { readonly children: ReactNode
       getTokenFromByRefreshToken().then(() => {
         fetchSetting();
         fetchUsers();
-        getTokenFromByRefreshToken();
       });
   }, []);
 
