@@ -33,22 +33,30 @@ export async function executeFourthPhase(
   }
   const rawDataFolderId = getLocationFolderId(user.location);
 
-  await moveFolderData((mainFolder as driveFile).id, rawDataFolderId, user.mailAddress);
+  await moveFolderData((mainFolder as driveFile).id, rawDataFolderId, user.mailAddress).then(
+    async (res) => {
+      if (res === 'success') {
+        await deleteEmptyFolder((mainFolder as driveFile).id);
+        await phaseApiActions.changeUserState(targetUserState.COMPLETE_PHASE, user.id, '4');
+        return 'success';
+      } else {
+        return 'Please run again';
+      }
+    },
+  );
 
-  await deleteEmptyFolder((mainFolder as driveFile).id);
-
-  await phaseApiActions.changeUserState(targetUserState.COMPLETE_PHASE, user.id, '4');
-
-  return 'success';
+  return 'error occured';
 }
 
 async function moveFolderData(
   exFolderId: string,
   newParentFolderId: string,
   name: string,
-): Promise<void> {
+): Promise<string> {
   const copyFolderId = await createFolder(name, newParentFolderId);
   const files = await getFilesInFolder(exFolderId);
+
+  let result = '';
 
   await Promise.all(
     files.map(async (file) => {
@@ -58,7 +66,14 @@ async function moveFolderData(
         await moveFile(file, exFolderId, copyFolderId);
       }
     }),
-  );
+  )
+    .then((res) => {
+      result = 'success';
+    })
+    .catch((err) => {
+      result = 'failed';
+    });
+  return result;
 }
 
 async function deleteEmptyFolder(targetFolderId: string): Promise<void> {
