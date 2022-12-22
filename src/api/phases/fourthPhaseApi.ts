@@ -71,6 +71,7 @@ async function moveFolderData(
       result = 'success';
     })
     .catch((err) => {
+      console.log(err);
       result = 'failed';
     });
   return result;
