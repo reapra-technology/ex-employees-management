@@ -39,12 +39,8 @@ export function Authorized({
 
   if (authInfo === null) {
     // 未ログインの場合の画面を表示する
-    console.log('null');
     return <>{children}</>;
   } else {
-    console.log('notnulllll');
-    console.log(authInfo);
-
     // ログイン済みの場合の画面を表示する
     // Contextを使って認可情報を子コンポーネントでも使用できるようにする
 

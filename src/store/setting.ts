@@ -1,9 +1,8 @@
-import { RecoilAtomKeys } from "@/store/RecoilKeys";
-import { SettingParameter } from "@/types/settingParameter";
-import { atom } from "recoil";
-import { fetchSettingFromDB, updateSetting } from "@/firebase/functions";
-import { useRecoilState } from "recoil";
-
+import { RecoilAtomKeys } from '@/store/RecoilKeys';
+import { SettingParameter } from '@/types/settingParameter';
+import { atom } from 'recoil';
+import { fetchSettingFromDB, updateSetting } from '@/firebase/functions';
+import { useRecoilState } from 'recoil';
 
 export enum targetValue {
   CLIENT_ID = 'CLIENT ID',
@@ -19,13 +18,13 @@ export enum targetValue {
 
 export const settingState = atom<SettingParameter | undefined>({
   key: RecoilAtomKeys.SETTING_STATE,
-  default: undefined
+  default: undefined,
 });
 
 export const editingSettingState = atom<SettingParameter | undefined>({
   key: RecoilAtomKeys.EDITING_SETTING_STATE,
   default: undefined,
-})
+});
 
 export const useSettingActions = () => {
   const [state, setState] = useRecoilState(settingState);
@@ -35,27 +34,39 @@ export const useSettingActions = () => {
       return;
     }
     const setting = await fetchSettingFromDB();
-    console.log(setting);
     setState(setting);
     setEditingState(setting);
-  }
+  };
 
   const editSettting = (value: string, target: string) => {
     const newSetting: SettingParameter = {
       setting_id: editingState?.setting_id ?? '',
       client_id: target === targetValue.CLIENT_ID ? value : editingState?.client_id ?? '',
-      client_secret: target === targetValue.CLIENT_SECRET ? value : editingState?.client_secret ?? '',
+      client_secret:
+        target === targetValue.CLIENT_SECRET ? value : editingState?.client_secret ?? '',
       matter_id: target === targetValue.MATTER_ID ? value : editingState?.matter_id ?? '',
-      jp_row_data_folder_id: target === targetValue.JP_RAW_DATA_FOLDER_ID ? value : editingState?.jp_row_data_folder_id ?? '',
-      sg_row_data_folder_id: target === targetValue.SG_RAW_DATA_FOLDER_ID ? value : editingState?.sg_row_data_folder_id ?? '',
-      vn_row_data_folder_id: target === targetValue.VN_RAW_DATA_FOLDER_ID ? value : editingState?.vn_row_data_folder_id ?? '',
-      jp_folder_id: target === targetValue.JP_ARCHIVE_FOLDER_ID ? value : editingState?.jp_folder_id ?? '',
-      sg_folder_id: target === targetValue.SG_ARCHIVE_FOLDER_ID ? value : editingState?.sg_folder_id ?? '',
-      vn_folder_id: target === targetValue.VN_ARCHIVE_FOLDER_ID ? value : editingState?.vn_folder_id ?? '',
-    }
+      jp_row_data_folder_id:
+        target === targetValue.JP_RAW_DATA_FOLDER_ID
+          ? value
+          : editingState?.jp_row_data_folder_id ?? '',
+      sg_row_data_folder_id:
+        target === targetValue.SG_RAW_DATA_FOLDER_ID
+          ? value
+          : editingState?.sg_row_data_folder_id ?? '',
+      vn_row_data_folder_id:
+        target === targetValue.VN_RAW_DATA_FOLDER_ID
+          ? value
+          : editingState?.vn_row_data_folder_id ?? '',
+      jp_folder_id:
+        target === targetValue.JP_ARCHIVE_FOLDER_ID ? value : editingState?.jp_folder_id ?? '',
+      sg_folder_id:
+        target === targetValue.SG_ARCHIVE_FOLDER_ID ? value : editingState?.sg_folder_id ?? '',
+      vn_folder_id:
+        target === targetValue.VN_ARCHIVE_FOLDER_ID ? value : editingState?.vn_folder_id ?? '',
+    };
 
     setEditingState(newSetting);
-  }
+  };
 
   const onCompleted = async () => {
     if (editingState === undefined) {
@@ -63,11 +74,11 @@ export const useSettingActions = () => {
     }
     setState(editingState);
     await updateSetting(editingState as SettingParameter);
-  }
+  };
 
   const onCanceled = () => {
     setEditingState(state);
-  }
+  };
 
   const getLocationArchiveFolderId = function (target: string): string {
     switch (target) {
@@ -79,7 +90,7 @@ export const useSettingActions = () => {
         return state?.vn_folder_id ?? '';
     }
     return '';
-  }
+  };
 
   const getLocationRowDataFolderId = function (target: string): string {
     switch (target) {
@@ -91,12 +102,16 @@ export const useSettingActions = () => {
         return state?.vn_row_data_folder_id ?? '';
     }
     return '';
-  }
-
+  };
 
   return {
-    currentSetting: state, fetchSetting: fetchSetting, editSettting: editSettting, onCompleted: onCompleted,
-    onCanceled: onCanceled, editingState: editingState, getLocationArchiveFolderId: getLocationArchiveFolderId,
-    getLocationRowDataFolderId: getLocationRowDataFolderId
+    currentSetting: state,
+    fetchSetting: fetchSetting,
+    editSettting: editSettting,
+    onCompleted: onCompleted,
+    onCanceled: onCanceled,
+    editingState: editingState,
+    getLocationArchiveFolderId: getLocationArchiveFolderId,
+    getLocationRowDataFolderId: getLocationRowDataFolderId,
   };
-}
+};

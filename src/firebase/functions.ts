@@ -1,7 +1,7 @@
-import { SettingParameter } from "@/types/settingParameter";
-import { db } from "../../firebase";
-import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
-import User from "@/types/user";
+import { SettingParameter } from '@/types/settingParameter';
+import { db } from '../../firebase';
+import { collection, deleteDoc, doc, getDocs, setDoc } from 'firebase/firestore';
+import User from '@/types/user';
 
 export async function fetchSettingFromDB(): Promise<SettingParameter | undefined> {
   const settingsCollectionRef = collection(db, 'settings');
@@ -26,47 +26,26 @@ export async function fetchUsersFromDB(): Promise<User[]> {
 }
 
 export async function updateSetting(newSetting: SettingParameter): Promise<void> {
-  const ref = doc(
-    db,
-    `settings/${newSetting.setting_id}`
-  )
-  await setDoc(ref, newSetting).then(() => {
-    console.log('success');
-  });
+  const ref = doc(db, `settings/${newSetting.setting_id}`);
+  await setDoc(ref, newSetting).then(() => {});
 }
 
 export async function createUser(user: User): Promise<void> {
-  const ref = doc(
-    db,
-    `users/${user.id}`
-  );
-  await setDoc(ref, user).then(() => {
-    console.log('success');
-  })
+  const ref = doc(db, `users/${user.id}`);
+  await setDoc(ref, user).then(() => {});
 }
 
 export async function updateUserStateOnDB(user: User): Promise<void> {
-  const ref = doc(
-    db,
-    `users/${user.id}`
-  );
-  await setDoc(ref, user, { merge: true }).then(() => {
-    console.log('success');
-  })
+  const ref = doc(db, `users/${user.id}`);
+  await setDoc(ref, user, { merge: true }).then(() => {});
 }
 
 export async function deleteUserOnDb(id: string): Promise<void> {
-  const ref = doc(
-    db,
-    `users/${id}`
-  );
+  const ref = doc(db, `users/${id}`);
   await deleteDoc(ref);
 }
 
 export async function archiveUser(user: User): Promise<void> {
-  const ref = doc(
-    db,
-    `archivedUser/${user.id}`
-  );
+  const ref = doc(db, `archivedUser/${user.id}`);
   await setDoc(ref, user);
 }
