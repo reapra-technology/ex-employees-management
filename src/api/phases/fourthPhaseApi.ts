@@ -151,7 +151,11 @@ async function moveFile(file: driveFile, exParent: string, newParent: string): P
         },
       },
     )
-    .then((res) => {});
+    .then((res) => {})
+    .catch(async (err) => {
+      console.log(err);
+      await moveFile(file, exParent, newParent);
+    });
   return result;
 }
 
