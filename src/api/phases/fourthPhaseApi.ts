@@ -33,19 +33,20 @@ export async function executeFourthPhase(
   }
   const rawDataFolderId = getLocationFolderId(user.location);
 
+  let result = '';
   await moveFolderData((mainFolder as driveFile).id, rawDataFolderId, user.mailAddress).then(
     async (res) => {
       if (res === 'success') {
         await deleteEmptyFolder((mainFolder as driveFile).id);
         await phaseApiActions.changeUserState(targetUserState.COMPLETE_PHASE, user.id, '4');
-        return 'success';
+        result = 'success';
       } else {
-        return 'Please run again';
+        result = 'Please run again';
       }
     },
   );
 
-  return 'error occured';
+  return result;
 }
 
 async function moveFolderData(
