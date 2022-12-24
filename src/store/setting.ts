@@ -11,6 +11,7 @@ export enum targetValue {
   JP_ARCHIVE_FOLDER_ID = 'JP ARCHIVE FOLDER ID',
   SG_ARCHIVE_FOLDER_ID = 'SG ARCHIVE FOLDER ID',
   VN_ARCHIVE_FOLDER_ID = 'VN ARCHIVE FOLDER ID',
+  TARGET_SHARE_DRIVE_ID = 'TARGET SHARE DRIVE ID',
   JP_RAW_DATA_FOLDER_ID = 'JP RAW DATA FOLDER ID',
   SG_RAW_DATA_FOLDER_ID = 'SG RAW DATA FOLDER ID',
   VN_RAW_DATA_FOLDER_ID = 'VN RAW DATA FOLDER ID',
@@ -45,6 +46,10 @@ export const useSettingActions = () => {
       client_secret:
         target === targetValue.CLIENT_SECRET ? value : editingState?.client_secret ?? '',
       matter_id: target === targetValue.MATTER_ID ? value : editingState?.matter_id ?? '',
+      target_share_drive_id:
+        target === targetValue.TARGET_SHARE_DRIVE_ID
+          ? value
+          : editingState?.target_share_drive_id ?? '',
       jp_row_data_folder_id:
         target === targetValue.JP_RAW_DATA_FOLDER_ID
           ? value

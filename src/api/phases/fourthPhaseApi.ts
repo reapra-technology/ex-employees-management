@@ -17,6 +17,7 @@ type driveFile = {
 export async function executeFourthPhase(
   user: User,
   phaseApiActions: PhaseApiActions,
+  teamDriveId: string,
   getLocationFolderId: (target: string) => string,
 ): Promise<string> {
   const status = await getTransferStatus(user.transferId ?? '');
@@ -34,17 +35,21 @@ export async function executeFourthPhase(
   const rawDataFolderId = getLocationFolderId(user.location);
 
   let result = '';
-  await moveFolderData((mainFolder as driveFile).id, rawDataFolderId, user.mailAddress).then(
-    async (res) => {
-      if (res === 'success') {
-        await deleteEmptyFolder((mainFolder as driveFile).id);
-        await phaseApiActions.changeUserState(targetUserState.COMPLETE_PHASE, user.id, '4');
-        result = 'success';
-      } else {
-        result = 'Please run again';
-      }
-    },
-  );
+  await moveFolderData(
+    (mainFolder as driveFile).id,
+    rawDataFolderId,
+    user.mailAddress,
+    true,
+    teamDriveId,
+  ).then(async (res) => {
+    if (res === 'success') {
+      await deleteEmptyFolder((mainFolder as driveFile).id);
+      await phaseApiActions.changeUserState(targetUserState.COMPLETE_PHASE, user.id, '4');
+      result = 'success';
+    } else {
+      result = 'Please run again';
+    }
+  });
 
   return result;
 }
@@ -53,8 +58,22 @@ async function moveFolderData(
   exFolderId: string,
   newParentFolderId: string,
   name: string,
+  isMain: boolean,
+  teamDriveId: string,
 ): Promise<string> {
-  const copyFolderId = await createFolder(name, newParentFolderId);
+  let copyFolderId: string = '';
+  if (!isMain) {
+    return '';
+  }
+  if (isMain) {
+    const existFolder = await getExsistFolderId(name, teamDriveId);
+    if (existFolder !== undefined && existFolder !== '') {
+      copyFolderId = (existFolder as driveFile).id;
+    }
+  }
+  if (copyFolderId === undefined || copyFolderId === '') {
+    copyFolderId = await createFolder(name, newParentFolderId);
+  }
   const files = await getFilesInFolder(exFolderId);
 
   let result = '';
@@ -62,7 +81,7 @@ async function moveFolderData(
   await Promise.all(
     files.map(async (file) => {
       if (file.mimeType === 'application/vnd.google-apps.folder') {
-        await moveFolderData(file.id, copyFolderId, file.name);
+        await moveFolderData(file.id, copyFolderId, file.name, false, teamDriveId);
       } else {
         await moveFile(file, exFolderId, copyFolderId);
       }
@@ -83,7 +102,6 @@ async function deleteEmptyFolder(targetFolderId: string): Promise<void> {
   if (token === undefined) {
     return;
   }
-  let result = '';
   const url = `https://www.googleapis.com/drive/v3/files/${targetFolderId}`;
 
   await axios.delete(url, {
@@ -173,6 +191,31 @@ async function moveFile(file: driveFile, exParent: string, newParent: string): P
       console.log(err);
       await moveFile(file, exParent, newParent);
     });
+  return result;
+}
+
+async function getExsistFolderId(
+  mailAddress: string,
+  teamDriveId: string,
+): Promise<driveFile | string> {
+  const token = getAuthInfo()?.access_token;
+  if (token === undefined) {
+    return '';
+  }
+  let result: driveFile | string = '';
+
+  let url = `https://www.googleapis.com/drive/v3/files?q=name='${mailAddress}'&driveId=${teamDriveId}&includeItemsFromAllDrives=true&corpora=drive&supportsAllDrives=true`;
+
+  await axios
+    .get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => {
+      result = res.data.files[0];
+    });
+
   return result;
 }
 

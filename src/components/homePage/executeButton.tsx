@@ -28,7 +28,7 @@ export default function ExecuteButton(
     const intervalId = setInterval(() => getTokenFromByRefreshToken(), 30 * 60 * 1000);
     addProcessing(user.mailAddress);
 
-    await logging();
+    // await logging();
     await exucuteProcees();
 
     removeProcessing(user.mailAddress);
@@ -65,7 +65,12 @@ export default function ExecuteButton(
       });
     }
     if (user.completePhase! === 3) {
-      await executeFourthPhase(user, phaseApiActions, getRawFolderId).then((result: string) => {
+      await executeFourthPhase(
+        user,
+        phaseApiActions,
+        setting?.target_share_drive_id ?? '',
+        getRawFolderId,
+      ).then((result: string) => {
         if (result !== 'success') {
           showSnackbar(result, 'error', 50000);
         }

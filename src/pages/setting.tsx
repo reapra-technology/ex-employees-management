@@ -36,6 +36,12 @@ export default function Setting() {
         isEditingMode,
       )}
       {ContentCard(
+        targetValue.TARGET_SHARE_DRIVE_ID,
+        editingState?.target_share_drive_id ?? '',
+        showAllContent,
+        isEditingMode,
+      )}
+      {ContentCard(
         targetValue.JP_ARCHIVE_FOLDER_ID,
         editingState?.jp_folder_id ?? '',
         showAllContent,
