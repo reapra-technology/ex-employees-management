@@ -28,7 +28,7 @@ export default function ExecuteButton(
     const intervalId = setInterval(() => getTokenFromByRefreshToken(), 30 * 60 * 1000);
     addProcessing(user.mailAddress);
 
-    // await logging();
+    await logging();
     await exucuteProcees();
 
     removeProcessing(user.mailAddress);
