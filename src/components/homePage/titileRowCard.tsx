@@ -19,7 +19,7 @@ export default function TitileRowCard() {
         content = '・トランスポートAPIの実行(退職者→実行者)';
         break;
       case 4:
-        content = '・Driveデータを目的のフォルダへ移動(実行者→目的フォルダ)';
+        content = 'トランスポートAPIの実行状況確認';
         break;
     }
     showSnackbar(content, 'info', 10000);

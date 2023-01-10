@@ -24,34 +24,9 @@ export async function executeFourthPhase(
   if (status !== 'completed') {
     return 'Data migration in progress';
   }
-  const mainFolder = await getTargetUserFolderId(user.mailAddress);
-  if (mainFolder === undefined && user.transferId) {
-    await phaseApiActions.changeUserState(targetUserState.COMPLETE_PHASE, user.id, '4');
-    return 'raw data has already been moved';
-  }
-  if (mainFolder === '') {
-    return '';
-  }
-  const rawDataFolderId = getLocationFolderId(user.location);
+  await phaseApiActions.changeUserState(targetUserState.COMPLETE_PHASE, user.id, '4');
 
-  let result = '';
-  await moveFolderData(
-    (mainFolder as driveFile).id,
-    rawDataFolderId,
-    user.mailAddress,
-    true,
-    teamDriveId,
-  ).then(async (res) => {
-    if (res === 'success') {
-      await deleteEmptyFolder((mainFolder as driveFile).id);
-      await phaseApiActions.changeUserState(targetUserState.COMPLETE_PHASE, user.id, '4');
-      result = 'success';
-    } else {
-      result = 'Please run again';
-    }
-  });
-
-  return result;
+  return 'success';
 }
 
 async function moveFolderData(
