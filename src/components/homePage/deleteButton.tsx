@@ -24,6 +24,9 @@ export default function DeleteButton(user: User, deleteUserOnDB: (id: string) =>
       })
       .then(async (_) => {
         await deleteUserOnDB(id);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
   return (

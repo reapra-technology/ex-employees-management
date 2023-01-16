@@ -69,6 +69,7 @@ async function requestTransfer(
       result = res.data.id;
     })
     .catch(function (err) {
+      console.log(err);
       result = '';
     });
   return result;
@@ -93,6 +94,7 @@ export async function getExecutorEmail(): Promise<string> {
       result = res.data.email;
     })
     .catch(function (err) {
+      console.log(err);
       result = '';
     });
   return result;
@@ -118,6 +120,7 @@ async function getDriveId(): Promise<string> {
       result = driveId;
     })
     .catch(function (err) {
+      console.log(err);
       result = '';
     });
   return result;
@@ -136,7 +139,8 @@ export async function getIdByMailAddress(mailAddress: string): Promise<string> {
     .then(function (res) {
       result = res.data.id;
     })
-    .catch(async function (error) {
+    .catch(async function (err) {
+      console.log(err);
       result = '';
     });
   return result;

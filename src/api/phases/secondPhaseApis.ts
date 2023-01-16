@@ -130,6 +130,7 @@ async function getRequestedArchiveInfo(
       result = (await res.data) as archiveData;
     })
     .catch(function (err) {
+      console.log(err);
       result = '';
     });
   return result;
@@ -164,6 +165,7 @@ async function downloadContents(
       result = blob;
     })
     .catch(function (err) {
+      console.log(err);
       result = err;
     });
 
@@ -197,6 +199,7 @@ async function getUploadUrl(objectName: string, parentFolderId: string): Promise
       result = res.headers['location'] ?? '';
     })
     .catch(function (err) {
+      console.log(err);
       result = '';
     });
 
@@ -229,6 +232,7 @@ async function uploadObject(
     })
     .then(function (res) {})
     .catch(function (err) {
+      console.log(err);
       result = '';
     });
 
