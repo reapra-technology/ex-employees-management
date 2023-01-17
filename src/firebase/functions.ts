@@ -1,6 +1,6 @@
 import { SettingParameter } from '@/types/settingParameter';
 import { db } from '../../firebase';
-import { collection, deleteDoc, doc, getDocs, setDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, orderBy, query, setDoc } from 'firebase/firestore';
 import User from '@/types/user';
 
 export async function fetchSettingFromDB(): Promise<SettingParameter | undefined> {
@@ -13,8 +13,8 @@ export async function fetchSettingFromDB(): Promise<SettingParameter | undefined
 }
 
 export async function fetchUsersFromDB(): Promise<User[]> {
-  const settingsCollectionRef = collection(db, 'users');
-  const result = await getDocs(settingsCollectionRef);
+  const userCollectionRef = query(collection(db, 'users'), orderBy('createdAt', 'asc'));
+  const result = await getDocs(userCollectionRef);
   let users: User[] = [];
   if (result.empty) {
     return [];
@@ -32,12 +32,12 @@ export async function updateSetting(newSetting: SettingParameter): Promise<void>
 
 export async function createUser(user: User): Promise<void> {
   const ref = doc(db, `users/${user.id}`);
-  await setDoc(ref, user).then(() => {});
+  await setDoc(ref, user);
 }
 
 export async function updateUserStateOnDB(user: User): Promise<void> {
   const ref = doc(db, `users/${user.id}`);
-  await setDoc(ref, user, { merge: true }).then(() => {});
+  await setDoc(ref, user, { merge: true });
 }
 
 export async function deleteUserOnDb(id: string): Promise<void> {
@@ -48,4 +48,17 @@ export async function deleteUserOnDb(id: string): Promise<void> {
 export async function archiveUser(user: User): Promise<void> {
   const ref = doc(db, `archivedUser/${user.id}`);
   await setDoc(ref, user);
+}
+
+export async function getExecutedUsersFromDB(): Promise<User[]> {
+  const collectionRef = query(collection(db, 'archivedUser'), orderBy('createdAt', 'asc'));
+  const result = await getDocs(collectionRef);
+  let users: User[] = [];
+  if (result.empty) {
+    return [];
+  }
+  result.docs.forEach((doc) => {
+    users.push(doc.data() as User);
+  });
+  return users;
 }
