@@ -1,4 +1,5 @@
 import { getExecutedUsersFromDB } from '@/firebase/functions';
+import { useExecutedUsersActions } from '@/store/executedUsers';
 import User from '@/types/user';
 import { reapraPrimaryColor } from '@/utils/color';
 import { Box, Dialog } from '@mui/material';
@@ -7,12 +8,10 @@ import React, { useEffect, useState } from 'react';
 
 export default function ExecutedUsers(): React.ReactElement {
   const [isOpen, setIsOpen] = useState(false);
-  const [users, setUsers] = useState<User[]>([]);
+  const { executedUsers, fetchExecutedUsers } = useExecutedUsersActions();
 
   useEffect(() => {
-    getExecutedUsersFromDB().then((users) => {
-      setUsers(users);
-    });
+    fetchExecutedUsers();
   });
 
   return (
@@ -57,8 +56,8 @@ export default function ExecutedUsers(): React.ReactElement {
             <h1 className="w-1/3 text-center">createdAt</h1>
           </div>
           <ul className="overflow-scroll" style={{ height: '500px' }}>
-            {users.map((user) => {
-              var m = new Date();
+            {executedUsers.map((user) => {
+              var m = new Date(user.createdAt);
               var dateString =
                 m.getUTCFullYear() +
                 '/' +

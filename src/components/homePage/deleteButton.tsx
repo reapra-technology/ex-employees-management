@@ -4,7 +4,11 @@ import User from '@/types/user';
 import { Button } from 'antd';
 import axios from 'axios';
 
-export default function DeleteButton(user: User, deleteUserOnDB: (id: string) => Promise<void>) {
+export default function DeleteButton(
+  user: User,
+  deleteUserOnDB: (id: string) => Promise<void>,
+  addExecutedUser: (user: User) => void,
+) {
   const deleteUser = async () => {
     await deleteUserOnDomain(user.mailAddress, user.id);
   };
@@ -24,6 +28,7 @@ export default function DeleteButton(user: User, deleteUserOnDB: (id: string) =>
       })
       .then(async (_) => {
         await deleteUserOnDB(id);
+        addExecutedUser(user);
       })
       .catch((err) => {
         console.log(err);

@@ -60,7 +60,7 @@ export const useUsersActions = () => {
       createdAt: Date.now(),
     };
     setState(function (prev) {
-      return [...prev, user];
+      return [user, ...prev];
     });
     await createUser(user);
   };
