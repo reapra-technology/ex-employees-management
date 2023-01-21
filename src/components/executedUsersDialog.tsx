@@ -65,7 +65,7 @@ export default function ExecutedUsers(): React.ReactElement {
                 '/' +
                 ('0' + m.getUTCDate()).slice(-2);
               return (
-                <li className="flex w-full justify-around border-b-2 p-3">
+                <li className="flex w-full justify-around border-b-2 p-3" key={user.id}>
                   <h1 className="w-1/3 text-center">{user.mailAddress}</h1>
                   <h1 className="w-1/3 text-center">{user.location}</h1>
                   <h1 className="w-1/3 text-center">{dateString}</h1>

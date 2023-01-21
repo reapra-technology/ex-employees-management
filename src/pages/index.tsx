@@ -26,7 +26,7 @@ export default function Users() {
       <ul className="h-2/3 overflow-scroll">
         {users.map((user, index) => {
           return (
-            <li>
+            <li key={user.id}>
               {RowCard(
                 user,
                 currentSetting,
