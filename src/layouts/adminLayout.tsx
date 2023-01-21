@@ -1,4 +1,3 @@
-// layouts/adminLayout.tsx
 import { getAuthInfo, getTokenFromByRefreshToken } from '@/api/tokenAuth';
 import { AuthorizedContext } from '@/components/contexts/tokenAuthContext';
 import LoginLayout from '@/layouts/loginLayout';
@@ -17,6 +16,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { ReactNode, useEffect, useState } from 'react';
 import styles from './adminLayout.module.css';
+import ExecutedUsers from '@/components/executedUsersDialog';
 
 const { Header, Sider, Content } = Layout;
 
@@ -81,6 +81,7 @@ export default function AdminLayout({ children }: { readonly children: ReactNode
           ) : (
             <MenuFoldOutlined className={styles.trigger} onClick={toggle} />
           )}
+          <ExecutedUsers></ExecutedUsers>
         </Header>
         <Content
           className={styles.siteLayoutBackground}

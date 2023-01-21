@@ -10,6 +10,7 @@ export default function RowCard(
   setting: SettingParameter | undefined,
   processingUsers: string[],
   deleteUser: (id: string) => Promise<void>,
+  addExecutedUser: (user: User) => void,
   addProcessing: (mail: string) => void,
   removeProcessing: (mail: string) => void,
   getLocationFolderId: (location: string) => string,
@@ -42,7 +43,7 @@ export default function RowCard(
       <p className="text-gray-300">|</p>
       <div className="flex w-1/6 items-center justify-around text-center">
         {parameter.completePhase === 4
-          ? DeleteButton(parameter, deleteUser)
+          ? DeleteButton(parameter, deleteUser, addExecutedUser)
           : ExecuteButton(
               parameter,
               setting,

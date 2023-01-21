@@ -1,15 +1,17 @@
-import { getAuthInfo, } from '@/api/tokenAuth';
+import { getAuthInfo } from '@/api/tokenAuth';
 import { PhaseApiActions } from '@/store/users';
 import User from '@/types/user';
 import axios from 'axios';
-
 
 // アーカイブ保存先フォルダ作成　フォルダID取得
 // メールアーカイブ依頼　アーカイブID取得
 // ドライブアーカイブ依頼　アーカイブID取得
 // メールフォルダ-ID＆ドライブフォルダーID＆メールアーカイブID＆ドライブアーカイブID->DB保存
 
-export async function executeFirstPhase(user: User, matterId: string, getLocationFolderId: (target: string) => string,
+export async function executeFirstPhase(
+  user: User,
+  matterId: string,
+  getLocationFolderId: (target: string) => string,
   phaseApiActions: PhaseApiActions,
 ): Promise<string> {
   const locationId = getLocationFolderId(user.location);
@@ -24,7 +26,6 @@ export async function executeFirstPhase(user: User, matterId: string, getLocatio
     return 'error occured';
   }
 
-
   const mailArchiveId = await requestArchive(user.mailAddress, matterId, false);
 
   const driveArchiveId = await requestArchive(user.mailAddress, matterId, true);
@@ -32,78 +33,89 @@ export async function executeFirstPhase(user: User, matterId: string, getLocatio
   if (mailArchiveId === '' || driveArchiveId === '') {
     return 'error occured';
   }
-  await phaseApiActions.completeFirstPhase(user.id, mailArchiveId, driveArchiveId, mailFolderId, driveFolderId);
+  await phaseApiActions.completeFirstPhase(
+    user.id,
+    mailArchiveId,
+    driveArchiveId,
+    mailFolderId,
+    driveFolderId,
+  );
 
   return 'success';
-
 }
 
 async function createArchiveFolder(mailAddress: string, locationId: string): Promise<string> {
   const token = getAuthInfo()?.access_token;
   if (token === undefined) {
-    return "";
+    return '';
   }
   let result = '';
-
 
   const toDay = formattedCurrentDate();
 
   const name = `${toDay} ${mailAddress}`;
-  const mimeType = "application/vnd.google-apps.folder";
+  const mimeType = 'application/vnd.google-apps.folder';
   const parents = [locationId];
   const url =
-    "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true&fileds=id";
+    'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true&fileds=id';
   const metadata = new Blob([JSON.stringify({ mimeType, name, parents })], {
-    type: "application/json; charset=UTF-8",
+    type: 'application/json; charset=UTF-8',
   });
   const formData = new FormData();
-  formData.append("Metadata", metadata);
+  formData.append('Metadata', metadata);
 
-  const res = await axios.post(url, formData, { headers: { Authorization: `Bearer ${token}`, } }).then(function (res) {
-    result = res.data.id;
-
-  }).catch(function (err) {
-    result = '';
-  });
+  const res = await axios
+    .post(url, formData, { headers: { Authorization: `Bearer ${token}` } })
+    .then(function (res) {
+      result = res.data.id;
+    })
+    .catch(function (err) {
+      console.log(err);
+      result = '';
+    });
 
   return result;
 }
 
-
-
 async function createFolder(baseFolderId: string, isDrive: boolean): Promise<string> {
-
   const token = getAuthInfo()?.access_token;
   if (token === undefined) {
-    return "";
+    return '';
   }
   let result = '';
 
   const name = isDrive ? 'Drive' : 'Email';
-  const mimeType = "application/vnd.google-apps.folder";
+  const mimeType = 'application/vnd.google-apps.folder';
   const parents = [baseFolderId];
   const url =
-    "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true&fileds=id";
+    'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true&fileds=id';
   const metadata = new Blob([JSON.stringify({ mimeType, name, parents })], {
-    type: "application/json; charset=UTF-8",
+    type: 'application/json; charset=UTF-8',
   });
   const formData = new FormData();
-  formData.append("Metadata", metadata);
+  formData.append('Metadata', metadata);
 
-  await axios.post(url, formData, { headers: { Authorization: `Bearer ${token}`, } }).then(function (res) {
-    result = res.data.id;
-  }).catch(function (err) {
-    result = '';
-  });
+  await axios
+    .post(url, formData, { headers: { Authorization: `Bearer ${token}` } })
+    .then(function (res) {
+      result = res.data.id;
+    })
+    .catch(function (err) {
+      console.log(err);
+      result = '';
+    });
 
   return result;
 }
 
-
-async function requestArchive(mailAddress: string, matterId: string, isDrive: boolean): Promise<string> {
+async function requestArchive(
+  mailAddress: string,
+  matterId: string,
+  isDrive: boolean,
+): Promise<string> {
   const token = getAuthInfo()?.access_token;
   if (token === undefined) {
-    return "";
+    return '';
   }
   let result = '';
 
@@ -113,39 +125,43 @@ async function requestArchive(mailAddress: string, matterId: string, isDrive: bo
   const searchMethod = 'ACCOUNT';
   const accountInfo = { emails };
   const query = {
-    corpus, dataScope, searchMethod, accountInfo
-  }
+    corpus,
+    dataScope,
+    searchMethod,
+    accountInfo,
+  };
 
   const exportFormat = 'MBOX';
   const showConfidentialModeContent = true;
   const mailOptions = {
-    exportFormat, showConfidentialModeContent
-  }
+    exportFormat,
+    showConfidentialModeContent,
+  };
 
   const exportOptions = {
-    mailOptions
-  }
-  const url =
-    `https://vault.googleapis.com/v1/matters/${matterId}/exports`;
+    mailOptions,
+  };
+  const url = `https://vault.googleapis.com/v1/matters/${matterId}/exports`;
   const name = (isDrive ? 'Drive-' : 'Email-') + mailAddress;
   const requestBody = isDrive ? { name, query } : { name, query, exportOptions };
 
-
-  await axios.post(url, requestBody, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': "application/json; charset=UTF-8"
-    }
-  }).then(function (res) {
-    result = res.data.id;
-  }).catch(function (err) {
-    result = '';
-  });
+  await axios
+    .post(url, requestBody, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    })
+    .then(function (res) {
+      result = res.data.id;
+    })
+    .catch(function (err) {
+      console.log(err);
+      result = '';
+    });
 
   return result;
-
 }
-
 
 function formattedCurrentDate() {
   const now = new Date();
@@ -154,8 +170,8 @@ function formattedCurrentDate() {
   const d = now.getDate();
 
   const yyyy = y.toString();
-  const mm = ("00" + m).slice(-2);
-  const dd = ("00" + d).slice(-2);
+  const mm = ('00' + m).slice(-2);
+  const dd = ('00' + d).slice(-2);
 
-  return (yyyy + mm + dd);
+  return yyyy + mm + dd;
 }

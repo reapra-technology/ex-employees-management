@@ -1,6 +1,5 @@
-import { getAuthInfo } from "@/api/tokenAuth";
-import axios from "axios";
-
+import { getAuthInfo } from '@/api/tokenAuth';
+import axios from 'axios';
 
 export async function getUserList(): Promise<string[]> {
   const token = getAuthInfo()?.access_token;
@@ -13,21 +12,25 @@ export async function getUserList(): Promise<string[]> {
   do {
     let url;
     if (nextPageToken) {
-      url = `https://admin.googleapis.com/admin/directory/v1/users?domain=reapra.sg&pageToken=${nextPageToken}`
+      url = `https://admin.googleapis.com/admin/directory/v1/users?domain=reapra.sg&pageToken=${nextPageToken}`;
     } else {
-      url = `https://admin.googleapis.com/admin/directory/v1/users?domain=reapra.sg`
+      url = `https://admin.googleapis.com/admin/directory/v1/users?domain=reapra.sg`;
     }
-    await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(async function (res) {
-      (res.data.users as []).forEach((user: any) => {
-        result.push(user.primaryEmail);
+    await axios
+      .get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(async function (res) {
+        (res.data.users as []).forEach((user: any) => {
+          result.push(user.primaryEmail);
+        });
+        nextPageToken = res.data.nextPageToken;
+      })
+      .catch((err) => {
+        console.error(err);
       });
-      nextPageToken = res.data.nextPageToken;
-    }).catch(function (err) {
-    });
   } while (nextPageToken);
   return result;
 }

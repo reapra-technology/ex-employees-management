@@ -1,9 +1,9 @@
-import {  saveFileData } from "@/api/phases/secondPhaseApis";
-
+import { saveFileData } from '@/api/phases/secondPhaseApis';
 
 type User = {
   id: string;
   mailAddress: string;
+  createdAt: number;
   location: string;
   completePhase?: number;
   mailExportId?: string;
@@ -12,7 +12,7 @@ type User = {
   mailDestinationId?: string;
   driveDestinationId?: string;
   objectFiles?: saveFileData[];
-  totalObjectFiles?: number
+  totalObjectFiles?: number;
 };
 
 export default User;

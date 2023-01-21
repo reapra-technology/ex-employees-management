@@ -5,9 +5,10 @@ import HorizontalDivider from '@/components/common/horizontalDivider';
 import { useUsersActions } from '@/store/users';
 import { useProcessingUsersActions } from '@/store/processingUsers';
 import { useSettingActions } from '@/store/setting';
+import { useExecutedUsersActions } from '@/store/executedUsers';
 
 export default function Users() {
-  const { users, changeUserState, deleteUser, phaseCompleteActions } = useUsersActions();
+  const { users, deleteUser, phaseCompleteActions } = useUsersActions();
   const { processingUsers, addProcessingUsers, removeProcessingUsers } =
     useProcessingUsersActions();
   const {
@@ -15,6 +16,7 @@ export default function Users() {
     getLocationRowDataFolderId,
     currentSetting,
   } = useSettingActions();
+  const { addExecutedUser } = useExecutedUsersActions();
 
   return (
     <>
@@ -24,12 +26,13 @@ export default function Users() {
       <ul className="h-2/3 overflow-scroll">
         {users.map((user, index) => {
           return (
-            <li>
+            <li key={user.id}>
               {RowCard(
                 user,
                 currentSetting,
                 processingUsers,
                 deleteUser,
+                addExecutedUser,
                 addProcessingUsers,
                 removeProcessingUsers,
                 getLocationFolderId,
