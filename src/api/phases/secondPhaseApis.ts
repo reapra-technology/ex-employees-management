@@ -4,7 +4,7 @@ import User from '@/types/user';
 import axios from 'axios';
 
 const completeText = 'COMPLETED';
-const chankSize = 1024 * 1024 * 500; //500MB
+const chankSize = 1024 * 1024 * 100; //100MB
 
 export type file = {
   bucketName: string;
